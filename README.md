@@ -2,7 +2,7 @@
 
 ##General
 * Author: Shadi Akiki ( shadiakiki1986 at gmail dot com )
-* Licensed under WTFPL
+* Licensed under WTFPL: http://www.wtfpl.net/
 * Semantic versioning: http://semver.org/
 
 ##Description
