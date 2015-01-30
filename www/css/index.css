@@ -1,0 +1,4 @@
+td { white-space: nowrap; }
+select { width:1em; }
+.blinking { text-decoration: blink; }
+.corner { position: absolute; top:0;left:25em;z-index:10; }

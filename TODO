@@ -1,0 +1,4 @@
+* move from zboota-server to zboota-app
+* http://stackoverflow.com/questions/21260627/how-to-migrate-a-private-bitbucket-repository-to-a-public-github-repository
+* document api in zboota-server
+* make zboota-server public repo

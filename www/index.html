@@ -1,0 +1,83 @@
+<!doctype html>
+<html ng-app>
+<head>
+	<title>Zboota</title>
+        <script src="js/vendor/jquery-2.1.1.min.js"></script>
+        <script src="js/vendor/angular-1.2.28.min.js"></script>
+        <!--<script src="js/vendor/angular-1.2.28.js"></script>-->
+        <script src="js/vendor/moment-2.9.0.min.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/Controller1.js"></script>
+        <script src="js/Controller2.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+<body>
+<div ng-controller="Controller1">
+	Zboota &nbsp;
+	<button ng-click="get();" ng-disabled="getStatus!='None' || !serverAvailable || noData()">Refresh</button> &nbsp;
+
+	<div ng-controller="Controller2" ng-show="serverAvailable">
+		<span class="corner">
+			<span ng-show="getStatus=='Requesting'||loginStatus=='Logging in'" class="blinking">&#x25BC</span>
+			<span ng-show="updateStatus=='Updating'" class="blinking">&#x25B2</span>
+		</span>
+		<br>
+
+		<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'"/> &nbsp;
+		<span ng-show="loginStatus=='Logged in'">{{loginU.email}}</span> &nbsp;
+		<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'" /> &nbsp;
+		<button ng-click="login();" ng-disabled="loginStatus!='None'||getStatus!='None'">Log in</button> &nbsp;
+		<button ng-click="newU();" ng-show="loginStatus!='Logged in'" ng-disabled="newUStatus!='None'">New</button> &nbsp;
+		<button ng-click="logout();" ng-show="loginStatus=='Logged in'">Log out</button> &nbsp;
+	</div>
+	<br>
+	Now: {{momentFormat1(tnow)}}<br>
+	<span ng-show="dataTs!=null">Data: {{momentFormat2(dataTs)}}</span>
+
+	<table border=0 id="mytable">
+	<tr>
+		<th></th><th></th><th></th>
+		<th><a href="http://www.isf.gov.lb/en/speedtickets">ISF</a></th>
+		<th><a href="http://www.parkmeterlebanon.com/default/STATMENT_OF_ACCOUNT.aspx">PML</a></th>
+		<th><button ng-click="clear()">Clear</button></th>
+	</tr>
+	<tr ng-repeat="rd in data">
+		<td>{{rd.a}}</td><td>{{rd.n}}</td><td>{{rd.l}}</td>
+		<td>{{rd.isf}}</td>
+		<td>{{rd.pml}}</td>
+		<td><button ng-click="del(rd.a,rd.n)">Del</button></td>
+	</tr>
+	<tr ng-show="noData()">
+		<td colspan=6>None</td>
+	</tr>
+	<tr>
+		<td>
+			<select ng-model="addC.a" ng-show="!addC.a"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select>
+			<span ng-show="addC.a!=''" ng-click="addC.a=''">{{addC.a}}</span>
+		</td>
+		<td><input type="text" ng-model="addC.n" placeholder="Number" size=2 /></td>
+		<td><input type="text" ng-model="addC.l" placeholder="Label" size=2 /></td>
+		<td></td>
+		<td></td>
+		<td><button ng-click="add();">Add</button></td>
+	</tr>
+	</table>
+
+</div><!-- end Controller1 -->
+
+<hr>
+<span><small>
+<ul>Disclaimer:
+<li>This app and its infrastructure were developed solely to serve my personal needs.</li>
+<li>I do not take any responsibility not whatsoever for any mistakes that may cause you to be fined.</li>
+<li>Otherwise, the app itself is licensed under <a href="http://wtfpl.net">WTFPL</a>,</li>
+<li>and the data belongs to its sole owners <a href="http://www.isf.gov.lb/en/speedtickets">ISF</a> and <a href="">PML</a>.</li>
+<li>There are similar apps out there, like <a href="https://play.google.com/store/apps/details?id=air.speedTicketLebanon">this</a>,
+<a href="http://www.appszoom.com/android_applications/tools/lebanese-traffic-ticket_inbfc.html">this</a>,
+<a href="https://play.google.com/store/apps/details?id=com.stround.lebanoncarfines">this</a>,
+<a href="https://play.google.com/store/apps/details?id=com.tesladroid.lebanontickets">this</a>,
+and <a href="https://play.google.com/store/apps/details?id=com.omr.zbt">this</a>
+</small></span>
+
+</body>
+</html>
