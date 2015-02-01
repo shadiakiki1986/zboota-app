@@ -67,6 +67,7 @@ function Controller1($scope) {
 			window.localStorage.setItem('data',angular.toJson(myscope.data));
 			if(!isChild) myscope.$broadcast('requestUpdate');
 			$scope.get();
+			$scope.hideAdd();
 		}
 	}
 
@@ -80,6 +81,9 @@ function Controller1($scope) {
 	};
 
 	angular.element(document).ready(function () {
+		$scope.hideAdd();
+		$('#disclaimerModal').modal('hide');
+
 		$scope.pingServer();
 		wlsgi1=window.localStorage.getItem('data');
 		wlsgi2=window.localStorage.getItem('dataTs');
@@ -91,5 +95,12 @@ function Controller1($scope) {
 	});
 
 	$scope.$on('requestAddCore', function(event,fn) { $scope.addCore(fn,true); });
+
+	$scope.showAdd=function() { $('#addModal').modal('show'); };
+	$scope.hideAdd=function() { $('#addModal').modal('hide'); };
+	$scope.showDisclaimer=function() { $('#disclaimerModal').modal('show'); };
+	$scope.hideDisclaimer=function() { $('#disclaimerModal').modal('hide'); };
+	$scope.getCarRowClass=function(a,n) { return ($scope.data[an2id(a,n)].isf!='None'||$scope.data[an2id(a,n)].pml!='None'?"lightpink":"white"); console.log($scope.data[an2id(a,n)]); };
+
 
 };

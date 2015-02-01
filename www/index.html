@@ -1,72 +1,101 @@
 <!doctype html>
-<html ng-app>
+<html ng-app lang="en">
 <head>
 	<title>Zboota</title>
         <script src="js/vendor/jquery-2.1.1.min.js"></script>
         <script src="js/vendor/angular-1.2.28.min.js"></script>
         <!--<script src="js/vendor/angular-1.2.28.js"></script>-->
         <script src="js/vendor/moment-2.9.0.min.js"></script>
+        <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/common.js"></script>
         <script src="js/Controller1.js"></script>
         <script src="js/Controller2.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css" />
 </head>
 <body>
-<div ng-controller="Controller1">
-	Zboota &nbsp;
-	<button ng-click="get();" ng-disabled="getStatus!='None' || !serverAvailable || noData()">Refresh</button> &nbsp;
-
-	<div ng-controller="Controller2" ng-show="serverAvailable">
-		<span class="corner">
-			<span ng-show="getStatus=='Requesting'||loginStatus=='Logging in'" class="blinking">&#x25BC</span>
-			<span ng-show="updateStatus=='Updating'" class="blinking">&#x25B2</span>
-		</span>
-		<br>
-
-		<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'"/> &nbsp;
-		<span ng-show="loginStatus=='Logged in'">{{loginU.email}}</span> &nbsp;
-		<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'" /> &nbsp;
-		<button ng-click="login();" ng-disabled="loginStatus!='None'||getStatus!='None'">Log in</button> &nbsp;
-		<button ng-click="newU();" ng-show="loginStatus!='Logged in'" ng-disabled="newUStatus!='None'">New</button> &nbsp;
-		<button ng-click="logout();" ng-show="loginStatus=='Logged in'">Log out</button> &nbsp;
+<div ng-controller="Controller1" class="container">
+	<div ng-controller="Controller2">
+		<div class="row">
+			<div class="muted pull-left"><img src="img/logo-57.png" /> Zboota</div>
+			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
+				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn pull-right btn-small">Log out</button>
+				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
+				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
+				<button ng-click="get();" ng-disabled="getStatus!='None' || !serverAvailable || noData()" class="btn btn-success btn-small">Refresh</button>
+				<button ng-click="showDisclaimer()" class="btn btn-info btn-small">Disclaimer</button>
+			</div>
+			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
+			<div class="pull-left">
+				<span ng-show="getStatus=='Requesting'||loginStatus=='Logging in'" class="blinking">&#x25BC</span>
+				<span ng-show="updateStatus=='Updating'" class="blinking">&#x25B2</span>
+			</div>
+		</div>
+		<div class="modal" id="loginModal" aria-hidden="true" hidden>
+			<div class="modal-header">
+				Enter your email and <span ng-show="loginType=='New'">desired</span> password
+			</div>
+			<div class="modal-body">
+				<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'"/> <br>
+				<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'" /> <br>
+			</div>
+			<div class="modal-footer pull-left" align="left">
+				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Log in</button> &nbsp;
+				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Create</button> &nbsp;
+				<button ng-click="hideLogin();" class="btn">Cancel</button>
+			</div>
+		</div>
 	</div>
-	<br>
-	Now: {{momentFormat1(tnow)}}<br>
-	<span ng-show="dataTs!=null">Data: {{momentFormat2(dataTs)}}</span>
 
-	<table border=0 id="mytable">
+
+
+	<table border=0 id="mytable" class="table">
 	<tr>
 		<th></th><th></th><th></th>
 		<th><a href="http://www.isf.gov.lb/en/speedtickets">ISF</a></th>
 		<th><a href="http://www.parkmeterlebanon.com/default/STATMENT_OF_ACCOUNT.aspx">PML</a></th>
-		<th><button ng-click="clear()">Clear</button></th>
+		<th><button ng-click="clear()" class="btn btn-danger">Clear</button></th>
 	</tr>
-	<tr ng-repeat="rd in data">
+	<tr ng-repeat="rd in data" bgcolor="{{getCarRowClass(rd.a,rd.n)}}">
 		<td>{{rd.a}}</td><td>{{rd.n}}</td><td>{{rd.l}}</td>
 		<td>{{rd.isf}}</td>
 		<td>{{rd.pml}}</td>
-		<td><button ng-click="del(rd.a,rd.n)">Del</button></td>
+		<td><button ng-click="del(rd.a,rd.n)" class="btn btn-warning">Del</button></td>
 	</tr>
 	<tr ng-show="noData()">
 		<td colspan=6>None</td>
 	</tr>
-	<tr>
-		<td>
-			<select ng-model="addC.a" ng-show="!addC.a"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select>
-			<span ng-show="addC.a!=''" ng-click="addC.a=''">{{addC.a}}</span>
-		</td>
-		<td><input type="text" ng-model="addC.n" placeholder="Number" size=2 /></td>
-		<td><input type="text" ng-model="addC.l" placeholder="Label" size=2 /></td>
-		<td></td>
-		<td></td>
-		<td><button ng-click="add();">Add</button></td>
-	</tr>
+	<tr><td colspan=6><button ng-click="showAdd();" class="btn btn-primary btn-lg btn-block">Add</button></td></tr>
 	</table>
 
-</div><!-- end Controller1 -->
+	<div class="row">
+		<div class="pull-right muted text-right">
+			Today: {{momentFormat2(tnow)}}<br>
+			<span ng-show="dataTs!=null">Data: {{momentFormat2(dataTs)}}</span>
+		</div>
+	</div>
+
+
+	<div id="addModal" class="modal" aria-hidden="true" hidden>
+		<div class="modal-header">Enter car details</div>
+		<div class="modal-body">
+			Letter: &nbsp; <select ng-model="addC.a" class="dropdown"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select> <br>
+			<input type="text" ng-model="addC.n" placeholder="Number" size=2 /> <br>
+			<input type="text" ng-model="addC.l" placeholder="Label" size=2 /> <br>
+		</div>
+		<div class="modal-footer pull-left">
+			<button ng-click="add();" class="btn btn-primary" ng-disabled="!addC.a||!addC.n||!addC.l">Add</button> &nbsp;
+			<button ng-click="hideAdd();" class="btn">Cancel</button>
+		</div>
+	</ul>
+	</div>
 
 <hr>
-<span><small>
+
+<span id="disclaimerModal" class="modal" aria-hidden="true" hidden>
+<button type="button" class="close" aria-label="Close" ng-click="hideDisclaimer()"><span aria-hidden="true">&times;</span></button>
+<small>
 <ul>Disclaimer:
 <li>This app and its infrastructure were developed solely to serve my personal needs.</li>
 <li>I do not take any responsibility not whatsoever for any mistakes that may cause you to be fined.</li>
@@ -78,6 +107,9 @@
 <a href="https://play.google.com/store/apps/details?id=com.tesladroid.lebanontickets">this</a>,
 and <a href="https://play.google.com/store/apps/details?id=com.omr.zbt">this</a>
 </small></span>
+
+
+</div><!-- end Controller1 -->
 
 </body>
 </html>

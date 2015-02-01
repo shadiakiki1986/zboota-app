@@ -9,6 +9,7 @@ function Controller2($scope) {
 			data: $scope.loginU,
 			dataType: 'json',
 			success: function(rt) {
+				$scope.hideLogin();
 				if(rt.hasOwnProperty("error")) {
 					alert("Zboota login error: "+rt.error);
 					$scope.$apply(function() { $scope.loginStatus='None'; });
@@ -85,6 +86,8 @@ function Controller2($scope) {
 	};
 
 	angular.element(document).ready(function () {
+		$scope.hideLogin();
+
 		wlsgi1=window.localStorage.getItem('loginU');
 		$scope.$apply(function() {
 			if(wlsgi1!==null) {
@@ -95,5 +98,9 @@ function Controller2($scope) {
 	});
 
 	$scope.$on('requestUpdate', function(event,fn) { $scope.update(); });
+
+	$scope.showLogin=function() { $scope.loginType='Log in'; $('#loginModal').modal('show'); };
+	$scope.hideLogin=function() { $('#loginModal').modal('hide'); };
+	$scope.showNew=function() { $scope.loginType='New';    $('#loginModal').modal('show'); };
 
 };
