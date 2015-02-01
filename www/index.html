@@ -20,7 +20,7 @@
 		<div class="row">
 			<div class="muted pull-left"><img src="img/logo-57.png" /> Zboota</div>
 			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
-				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn pull-right btn-small">Log out</button>
+				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
 				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
 				<button ng-click="get();" ng-disabled="getStatus!='None' || !serverAvailable || noData()" class="btn btn-success btn-small">Refresh</button>
