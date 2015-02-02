@@ -35,18 +35,9 @@ android update sdk --no-ui --filter 1,2,4
 sudo apt-get install git
 git clone https://github.com/shadiakiki1986/zboota-app.git
 
-# build for android
+# prepare for build for android
 cd zboota-app
 cordova platform add android
-cordova build android --release # this generates an unsigned version
 
-echo "-------------------------------------------"
-echo "Completed building. Please sign using below"
-echo ""
-echo "keytool -v -genkey -v -keystore zboota-app.keystore -alias \"zboota-app\" -keyalg RSA -validity 10000"
-echo "jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/zboota-app.keystore ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk zboota-app"
-echo "jarsigner -verify -verbose -certs ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk"
-echo "$ANDROID_HOME/build-tools/21.1.2/zipalign -v 4 ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk ~/zboota-app-release-signed.apk"
-echo ""
-echo "After which app would be available in ~/zboota-app-release-signed.apk"
-echo "and you could upload it to Google play at https://play.google.com/apps/publish/"
+# generate key for this app for google play
+keytool -v -genkey -v -keystore zboota-app.keystore -alias \"zboota-app\" -keyalg RSA -validity 10000
