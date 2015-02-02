@@ -67,8 +67,11 @@ function Controller2($scope) {
 			data: $scope.loginU,
 			dataType: 'json',
 			success: function(rt) {
-				if(rt.hasOwnProperty("error")) alert("Zboota new account error: "+rt.error);
 				$scope.hideLogin();
+				if(rt.hasOwnProperty("error")) {
+					alert("Zboota new account error: "+rt.error);
+					return;
+				}
 				alert("Please check your email in a few minutes and click on the link to confirm that the email address is indeed yours.");
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
