@@ -32,7 +32,7 @@
 				<span ng-show="updateStatus=='Updating'" class="blinking">&#x25B2</span>
 			</div>
 		</div>
-		<div class="modal" id="loginModal" aria-hidden="true" hidden>
+		<div class="modal" id="loginModal" aria-hidden="true" hidden data-backdrop="static">
 			<div class="modal-header">
 				Enter your email and <span ng-show="loginType=='New'">desired</span> password
 			</div>
@@ -77,7 +77,7 @@
 	</div>
 
 
-	<div id="addModal" class="modal" aria-hidden="true" hidden>
+	<div id="addModal" class="modal" aria-hidden="true" hidden data-backdrop="static">
 		<div class="modal-header">Enter car details</div>
 		<div class="modal-body">
 			Letter: &nbsp; <select ng-model="addC.a" class="dropdown"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select> <br>
