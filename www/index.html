@@ -42,7 +42,7 @@
 			</div>
 			<div class="modal-footer pull-left" align="left">
 				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Log in</button> &nbsp;
-				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-primary">Forgot password</button> &nbsp;
+				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-warning">Forgot password</button> &nbsp;
 				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Create</button> &nbsp;
 				<button ng-click="hideLogin();" class="btn">Cancel</button>
 			</div>
