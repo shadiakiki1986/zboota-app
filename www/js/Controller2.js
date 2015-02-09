@@ -107,4 +107,28 @@ function Controller2($scope) {
 	$scope.hideLogin=function() { $('#loginModal').modal('hide'); };
 	$scope.showNew=function() { $scope.loginType='New';    $('#loginModal').modal('show'); };
 
+	$scope.forgotPasswordStatus=false;
+	$scope.forgotPassword=function() {
+		$scope.forgotPasswordStatus=true;
+		$.ajax({type:'POST',
+			url: ZBOOTA_SERVER_URL+'/api/forgotPassword.php',
+			data: $scope.loginU,
+			dataType: 'json',
+			success: function(rt) {
+				if(rt.hasOwnProperty("error")) {
+					alert("Zboota forgot password error: "+rt.error);
+					return;
+				}
+				alert("Your password has been emailed to you. Please check in a few minutes.");
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert("Error in forgot password. "+textStatus+","+errorThrown);
+			},
+			complete: function() {
+				$scope.hideLogin();
+				$scope.$apply(function() { $scope.forgotPasswordStatus=false; });
+			}
+		});
+	};
+
 };
