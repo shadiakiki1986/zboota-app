@@ -9,6 +9,6 @@ $ANDROID_HOME/build-tools/21.1.2/zipalign -v 4 ~/zboota-app/platforms/android/an
 
 echo "Completed build app for android"
 echo "Version: "
-$ANDROID_HOME/build-tools/21.1.2/aapt dump badging zboota-app-release-signed.apk |head -n 1
+$ANDROID_HOME/build-tools/21.1.2/aapt dump badging ~/zboota-app-release-signed.apk |head -n 1
 echo "App is now available in ~/zboota-app-release-signed.apk"
 echo "and you could upload it to Google play at https://play.google.com/apps/publish/"
