@@ -42,7 +42,9 @@
 
     <!--
     Deeplinking to zboota app from the notification email of a zabet
-    Reference: http://appurl.org/docs/android
+    References:
+    http://appurl.org/docs/android
+    https://developers.google.com/app-indexing/webmasters/app
     -->
     <activity xmlns:android="http://schemas.android.com/apk/res/android"
     	  android:name="com.akikieng.genesis.zbootaapp.HandleURL"
@@ -51,7 +53,9 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="http://genesis.akikieng.com/zboota-server/client" />
+        <data android:scheme="http"
+           android:host="genesis.akikieng.com"
+           android:path="/zboota-server/client" />
       </intent-filter>
     </activity>
 
