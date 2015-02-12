@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cordova build android --release
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/zboota-app.keystore ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk zboota-app
 jarsigner -verify -verbose -certs ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk

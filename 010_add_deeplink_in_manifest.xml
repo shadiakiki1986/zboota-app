@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+    <!--
+    Deeplinking to zboota app from the notification email of a zabet
+    References:
+    http://appurl.org/docs/android
+    https://developers.google.com/app-indexing/webmasters/app
+    -->
+    <intent-filter xmlns:android="http://schemas.android.com/apk/res/android">
+	<action android:name="android.intent.action.VIEW" />
+	<category android:name="android.intent.category.DEFAULT" />
+	<category android:name="android.intent.category.BROWSABLE" />
+	<data android:host="genesis.akikieng.com" android:path="/zboota-server/client" android:scheme="http" />
+    </intent-filter>

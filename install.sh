@@ -18,7 +18,7 @@ curl -sL https://deb.nodesource.com/setup | bash -
 apt-get install -y nodejs
 
 # install cordova
-npm install -g cordova
+npm install -g cordova libxmljs fs
 
 # install android sdk
 # Reference: http://sblackwell.com/blog/2014/06/installing-the-android-sdk-on-a-headless-server/
