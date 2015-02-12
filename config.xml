@@ -46,6 +46,8 @@
     http://appurl.org/docs/android
     https://developers.google.com/app-indexing/webmasters/app
     -->
+<platform name="android">
+    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
     <activity xmlns:android="http://schemas.android.com/apk/res/android"
     	  android:name="com.akikieng.genesis.zbootaapp.HandleURL"
     	  android:label="Zboota">
@@ -58,5 +60,7 @@
            android:path="/zboota-server/client" />
       </intent-filter>
     </activity>
+    </config-file>
+</platform>
 
 </widget>
