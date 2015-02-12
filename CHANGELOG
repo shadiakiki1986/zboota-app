@@ -1,6 +1,9 @@
 I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+=1.1.4=
+* 2015-02-12: had wrong deeplink... testing correct one
+
 =1.1.3=
 * 2015-02-11: added deeplinking
 
