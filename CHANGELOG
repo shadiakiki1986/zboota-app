@@ -1,6 +1,10 @@
 I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+=1.1.5=
+* New email registration does not require clicking on confirmation code anymore
+* Password is given to user by server in email
+
 =1.1.4=
 * 2015-02-12: had wrong deeplink... testing correct one
 

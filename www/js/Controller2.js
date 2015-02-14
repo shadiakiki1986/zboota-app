@@ -64,7 +64,7 @@ function Controller2($scope) {
 		$scope.newUStatus='Registering';
 		$.ajax({type:'POST',
 			url: ZBOOTA_SERVER_URL+'/api/new.php',
-			data: $scope.loginU,
+			data: {'email':$scope.loginU.email},
 			dataType: 'json',
 			success: function(rt) {
 				$scope.hideLogin();
@@ -72,7 +72,7 @@ function Controller2($scope) {
 					alert("Zboota new account error: "+rt.error);
 					return;
 				}
-				alert("Please check your email in a few minutes and click on the link to confirm that the email address is indeed yours.");
+				alert("Please check your email in a few minutes and log into the app using the random password in the email.");
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert("Error adding new account. "+textStatus+","+errorThrown);
