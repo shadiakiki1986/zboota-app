@@ -1,6 +1,13 @@
 I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+=1.1.8=
+* added top margin to avoid overlap with battery indicator on ios
+* saved on some horizontal space
+
+=1.1.7=
+* repackage for ios
+
 =1.1.5=
 * New email registration does not require clicking on confirmation code anymore
 * Password is given to user by server in email

@@ -10,21 +10,21 @@
         <script src="js/common.js"></script>
         <script src="js/Controller1.js"></script>
         <script src="js/Controller2.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/index.css" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 <body>
 <div ng-controller="Controller1" class="container">
 	<div ng-controller="Controller2">
 		<div class="row">
-			<div class="muted pull-left"><img src="img/logo-57.png" /> Zboota</div>
+			<div class="muted pull-left"><img src="img/logo-57.png" /><!-- Zboota--></div>
 			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
 				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
 				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
 				<button ng-click="get();" ng-disabled="getStatus!='None' || !serverAvailable || noData()" class="btn btn-success btn-small">Refresh</button>
-				<button ng-click="showDisclaimer()" class="btn btn-info btn-small">Disclaimer</button>
+				<!--<button ng-click="showDisclaimer()" class="btn btn-info btn-small">Disclaimer</button>-->
 			</div>
 			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
 			<div class="pull-left">
@@ -53,15 +53,30 @@
 
 	<table border=0 id="mytable" class="table">
 	<tr>
-		<th></th><th></th><th></th>
-		<th><a href="http://www.isf.gov.lb/en/speedtickets">ISF</a></th>
-		<th><a href="http://www.parkmeterlebanon.com/default/STATMENT_OF_ACCOUNT.aspx">PML</a></th>
+		<th></th>
+		<th>Tickets</th>
 		<th><button ng-click="clear()" class="btn btn-danger">Clear</button></th>
 	</tr>
 	<tr ng-repeat="rd in data" bgcolor="{{getCarRowClass(rd.a,rd.n)}}">
-		<td>{{rd.a}}</td><td>{{rd.n}}</td><td>{{rd.l}}</td>
-		<td>{{rd.isf}}</td>
-		<td>{{rd.pml}}</td>
+		<td>
+			<span>{{rd.l}}</span>
+			<br>
+			<span class="muted">{{rd.a}} &nbsp; {{rd.n}}</span>
+		</td>
+		<td>
+				<div ng-if="rd.isf!='None'">
+					<a href="http://www.isf.gov.lb/en/speedtickets">ISF</a>:<br>
+					{{rd.isf}}
+				</div>
+				<div ng-if="rd.pml!='None'">
+					<a href="http://www.parkmeterlebanon.com/default/STATMENT_OF_ACCOUNT.aspx">PML</a>:<br>
+					{{rd.pml}}
+				</div>
+				<div ng-if="rd.isf=='None' && rd.pml=='None'">
+					None
+				</div>
+			</span>
+		</td>
 		<td><button ng-click="del(rd.a,rd.n)" class="btn btn-warning">Del</button></td>
 	</tr>
 	<tr ng-show="noData()">

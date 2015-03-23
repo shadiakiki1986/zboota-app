@@ -1,3 +1,4 @@
+body { margin-top:30px; }
 td { white-space: nowrap; }
 select { width:1em; }
 .blinking { text-decoration: blink; }
