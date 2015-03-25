@@ -23,7 +23,6 @@
 				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
 				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
-				<button ng-click="get();" ng-disabled="getStatus!='None' || !serverAvailable || noData()" class="btn btn-success btn-small">Refresh</button>
 				<!--<button ng-click="showDisclaimer()" class="btn btn-info btn-small">Disclaimer</button>-->
 			</div>
 			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
@@ -33,7 +32,9 @@
 			</div>
 		</div>
 		<div class="modal" id="loginModal" aria-hidden="true" hidden data-backdrop="static">
+
 			<div class="modal-header">
+       				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				Enter your email <span ng-show="loginType!='New'"> and password</span>
 			</div>
 			<div class="modal-body">
@@ -44,7 +45,6 @@
 				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Log in</button> &nbsp;
 				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-warning">Forgot password</button> &nbsp;
 				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email" class="btn btn-primary">Create</button> &nbsp;
-				<button ng-click="hideLogin();" class="btn">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -55,7 +55,10 @@
 	<tr>
 		<th></th>
 		<th>Tickets</th>
-		<th><button ng-click="clear()" class="btn btn-danger">Clear</button></th>
+		<th>
+			<!--<button ng-click="clear()" class="btn btn-danger">Clear</button>-->
+			<button ng-click="get();" ng-show="!(getStatus!='None' || !serverAvailable || noData())" class="btn btn-success btn-small">Refresh</button>
+		</th>
 	</tr>
 	<tr ng-repeat="rd in data" bgcolor="{{getCarRowClass(rd.a,rd.n)}}">
 		<td>
@@ -94,7 +97,10 @@
 
 
 	<div id="addModal" class="modal" aria-hidden="true" hidden data-backdrop="static">
-		<div class="modal-header">Enter car details</div>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			Enter car details
+		</div>
 		<div class="modal-body">
 			Letter: &nbsp; <select ng-model="addC.a" class="dropdown"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select> <br>
 			<input type="text" ng-model="addC.n" placeholder="Number" size=2 /> <br>
@@ -102,7 +108,6 @@
 		</div>
 		<div class="modal-footer pull-left">
 			<button ng-click="add();" class="btn btn-primary" ng-disabled="!addC.a||!addC.n||!addC.l">Add</button> &nbsp;
-			<button ng-click="hideAdd();" class="btn">Cancel</button>
 		</div>
 	</ul>
 	</div>
