@@ -5,6 +5,7 @@ http://semver.org/
 * added top margin to avoid overlap with battery indicator on ios
 * saved on some horizontal space
 * some aesthetics on iOS
+* removed the disclaimer from the app and small improvements to readme
 
 =1.1.7=
 * repackage for ios

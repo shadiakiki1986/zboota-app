@@ -23,7 +23,6 @@
 				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
 				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
-				<!--<button ng-click="showDisclaimer()" class="btn btn-info btn-small">Disclaimer</button>-->
 			</div>
 			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
 			<div class="pull-left">
@@ -111,24 +110,6 @@
 		</div>
 	</ul>
 	</div>
-
-<hr>
-
-<span id="disclaimerModal" class="modal" aria-hidden="true" hidden>
-<button type="button" class="close" aria-label="Close" ng-click="hideDisclaimer()"><span aria-hidden="true">&times;</span></button>
-<small>
-<ul>Disclaimer:
-<li>This app and its infrastructure were developed solely to serve my personal needs.</li>
-<li>I do not take any responsibility not whatsoever for any mistakes that may cause you to be fined.</li>
-<li>Otherwise, the app itself is licensed under <a href="http://wtfpl.net">WTFPL</a>,</li>
-<li>and the data belongs to its sole owners <a href="http://www.isf.gov.lb/en/speedtickets">ISF</a> and <a href="">PML</a>.</li>
-<li>There are similar apps out there, like <a href="https://play.google.com/store/apps/details?id=air.speedTicketLebanon">this</a>,
-<a href="http://www.appszoom.com/android_applications/tools/lebanese-traffic-ticket_inbfc.html">this</a>,
-<a href="https://play.google.com/store/apps/details?id=com.stround.lebanoncarfines">this</a>,
-<a href="https://play.google.com/store/apps/details?id=com.tesladroid.lebanontickets">this</a>,
-and <a href="https://play.google.com/store/apps/details?id=com.omr.zbt">this</a>
-</small></span>
-
 
 </div><!-- end Controller1 -->
 
