@@ -16,6 +16,7 @@ What sets this one apart is:
 * It's opensourced [here](https://github.com/shadiakiki1986/zboota-app)
 * It's on [Google Play](https://play.google.com/store/apps/details?id=com.akikieng.genesis.zbootaapp) and [Apple Store](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=974745846&mt=8)
 * You can use it in your [browser](http://genesis.akikieng.com/zboota-server/client)
+* The app has a [facebook page](http://www.facebook.com/yaza4) 
 
 ##Misc
 * Author: Shadi Akiki ( shadiakiki1986 at gmail dot com )
