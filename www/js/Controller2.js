@@ -72,7 +72,7 @@ function Controller2($scope) {
 					alert("Zboota new account error: "+rt.error);
 					return;
 				}
-				alert("Please check your email in a few minutes and log into the app using the random password in the email.");
+				alert("Please check your email in a few minutes (including possibly the junk mail folder) and log into the app using the random password in the email.");
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert("Error adding new account. "+textStatus+","+errorThrown);
