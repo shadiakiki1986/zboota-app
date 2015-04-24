@@ -1,6 +1,9 @@
 I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+=1.1.9=
+* blinking down/up arrows were not working. Fixed
+
 =1.1.8=
 * added top margin to avoid overlap with battery indicator on ios
 * saved on some horizontal space
