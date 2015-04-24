@@ -102,5 +102,8 @@ function Controller1($scope) {
 	$scope.hideDisclaimer=function() { $('#disclaimerModal').modal('hide'); };
 	$scope.getCarRowClass=function(a,n) { return ($scope.data[an2id(a,n)].isf!='None'||$scope.data[an2id(a,n)].pml!='None'?"lightpink":"white"); console.log($scope.data[an2id(a,n)]); };
 
+	$scope.dataDateVsToday=function() {
+		if($scope.momentFormat2($scope.tnow)!=$scope.momentFormat2($scope.dataTs)) return "text-danger bg-danger"; else return "";
+	};
 
 };

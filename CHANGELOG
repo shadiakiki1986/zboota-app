@@ -3,6 +3,9 @@ http://semver.org/
 
 =1.1.9=
 * blinking down/up arrows were not working. Fixed
+* added red background when data date != today
+* upgraded to using bootstrap 3.3.4
+* fixed muted class to be text-muted
 
 =1.1.8=
 * added top margin to avoid overlap with battery indicator on ios

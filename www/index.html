@@ -6,19 +6,20 @@
         <script src="js/vendor/angular-1.2.28.min.js"></script>
         <!--<script src="js/vendor/angular-1.2.28.js"></script>-->
         <script src="js/vendor/moment-2.9.0.min.js"></script>
-        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/vendor/bootstrap-3.3.4.min.js"></script>
         <script src="js/common.js"></script>
         <script src="js/Controller1.js"></script>
         <script src="js/Controller2.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css" />
+	<!--<link rel="stylesheet" type="text/css" href="css/vendor/bootstrap.min.css" />-->
+	<link rel="stylesheet" type="text/css" href="css/vendor/bootstrap-3.3.4.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/vendor/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 <body>
 <div ng-controller="Controller1" class="container">
 	<div ng-controller="Controller2">
 		<div class="row">
-			<div class="muted pull-left"><img src="img/logo-57.png" /><!-- Zboota--></div>
+			<div class="text-muted pull-left"><img src="img/logo-57.png" /><!-- Zboota--></div>
 			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
 				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
@@ -63,7 +64,7 @@
 		<td>
 			<span>{{rd.l}}</span>
 			<br>
-			<span class="muted">{{rd.a}} &nbsp; {{rd.n}}</span>
+			<span class="text-muted">{{rd.a}} &nbsp; {{rd.n}}</span>
 		</td>
 		<td>
 				<div ng-if="rd.isf!='None'">
@@ -88,12 +89,11 @@
 	</table>
 
 	<div class="row">
-		<div class="pull-right muted text-right">
+		<div class="pull-right text-muted text-right" ng-class="dataDateVsToday()">
 			Today: {{momentFormat2(tnow)}}<br>
-			<span ng-show="dataTs!=null">Data: {{momentFormat2(dataTs)}}</span>
+			<span ng-show="dataTs!=null" >Data: {{momentFormat2(dataTs)}}</span>
 		</div>
 	</div>
-
 
 	<div id="addModal" class="modal" aria-hidden="true" hidden data-backdrop="static">
 		<div class="modal-header">
