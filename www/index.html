@@ -57,31 +57,37 @@
 		<th>Tickets</th>
 		<th>
 			<!--<button ng-click="clear()" class="btn btn-danger">Clear</button>-->
-			<button ng-click="get();" ng-show="!(getStatus!='None' || !serverAvailable || noData())" class="btn btn-success btn-small">Refresh</button>
+			<button ng-click="get();" ng-disabled="(getStatus!='None' || !serverAvailable || noData())" class="btn btn-success btn-small"><span class="glyphicon glyphicon-refresh"></span></button>
 		</th>
 	</tr>
-	<tr ng-repeat="rd in data" bgcolor="{{getCarRowClass(rd.a,rd.n)}}">
-		<td>
-			<span>{{rd.l}}</span>
-			<br>
-			<span class="text-muted">{{rd.a}} &nbsp; {{rd.n}}</span>
-		</td>
-		<td>
-				<div ng-if="rd.isf!='None'">
+	<tbody ng-repeat="rd in data">
+		<tr class="{{getCarRowClass(rd.a,rd.n)}}">
+			<td rowspan={{rd.dm?2:1}}><!-- style="white-space: nowrap">-->
+				<span>{{rd.l}}</span>
+				<br>
+				<span class="text-muted">{{rd.a}} &nbsp; {{rd.n}}</span>
+				<div ng-if="rd.hp || rd.y || rd.t" class="text-muted">
+				{{rd.hp}} HP <br> {{rd.y}} <br> {{rd.t}}
+				</div>
+			</td>
+			<td>
+				<div ng-if="rd.isf!='None' && rd.isf">
 					<a href="http://www.isf.gov.lb/en/speedtickets">ISF</a>:<br>
 					{{rd.isf}}
 				</div>
-				<div ng-if="rd.pml!='None'">
+				<div ng-if="rd.pml!='None' && rd.pml">
 					<a href="http://www.parkmeterlebanon.com/default/STATMENT_OF_ACCOUNT.aspx">PML</a>:<br>
 					{{rd.pml}}
 				</div>
 				<div ng-if="rd.isf=='None' && rd.pml=='None'">
 					None
 				</div>
-			</span>
-		</td>
-		<td><button ng-click="del(rd.a,rd.n)" class="btn btn-warning">Del</button></td>
-	</tr>
+				<div ng-if="!rd.isf || !rd.pml" class="blinking">&#x25BC</div>
+			</td>
+			<td rowspan={{rd.dm?2:1}}><button ng-click="del(rd.a,rd.n)" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span></button></td>
+		</tr>
+		<tr ng-if="rd.dm" class="{{getCarRowClass(rd.a,rd.n)}}"><td><a href="http://www.dawlati.gov.lb/en/mecanique">Mechanique</a>: {{rd.dm}}</td></tr>
+	</tbody>
 	<tr ng-show="noData()">
 		<td colspan=6>None</td>
 	</tr>
@@ -96,19 +102,28 @@
 	</div>
 
 	<div id="addModal" class="modal" aria-hidden="true" hidden data-backdrop="static">
+	<div class="modal-dialog">
+      <div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			Enter car details
 		</div>
 		<div class="modal-body">
-			Letter: &nbsp; <select ng-model="addC.a" class="dropdown"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select> <br>
-			<input type="text" ng-model="addC.n" placeholder="Number" size=2 /> <br>
-			<input type="text" ng-model="addC.l" placeholder="Label" size=2 /> <br>
+			Letter: &nbsp; <select ng-model="addC.a" class="dropdown form-control"><option ng-repeat="a in areas" ng-value="a">{{a}}</option></select> <br>
+			<input type="text" ng-model="addC.n" placeholder="Number" size=10 class="form-control" /> <br>
+			<input type="text" ng-model="addC.l" placeholder="Label" size=10 class="form-control" /> <br>
+			Optional (for mechanique schedule): <br>
+			Horse power: &nbsp; <select ng-model="addC.hp" class="dropdown form-control"><option ng-repeat="a in horsepowers" ng-value="a">{{a}}</option></select> <br>
+			Year of model: &nbsp; <select ng-model="addC.y" class="dropdown form-control"><option ng-repeat="a in years" ng-value="a">{{a}}</option></select> <br>
+			Type: &nbsp; <select ng-model="addC.t" class="dropdown form-control"><option ng-repeat="a in cartypes" ng-value="a">{{a}}</option></select> <br>
 		</div>
 		<div class="modal-footer pull-left">
-			<button ng-click="add();" class="btn btn-primary" ng-disabled="!addC.a||!addC.n||!addC.l">Add</button> &nbsp;
+			<button ng-click="add();" class="btn btn-primary" ng-disabled="!addC.a||!addC.n||!addC.l||!((!addC.y&&!addC.hp&&!addC.t)||(addC.y&&addC.hp&&addC.t))">Add</button> &nbsp;
+			<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;
 		</div>
-	</ul>
+		</div>
+		</div>
+
 	</div>
 
 </div><!-- end Controller1 -->

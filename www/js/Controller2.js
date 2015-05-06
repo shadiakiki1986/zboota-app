@@ -37,7 +37,13 @@ function Controller2($scope) {
 
 		// drop the ISF and PML data so that only the area, number, and label are stored
 		temp=angular.fromJson(angular.toJson($scope.$parent.data));
-		for(t in temp) { temp[t]={'a':temp[t].a,'n':temp[t].n,'l':temp[t].l}; }
+		for(t in temp) {
+			temp2={'a':temp[t].a, 'n':temp[t].n, 'l':temp[t].l};
+			if(temp[t].hp) temp2.hp=temp[t].hp;
+			if(temp[t].y) temp2.y=temp[t].y;
+			if(temp[t].t) temp2.t=temp[t].t;
+			temp[t]=temp2;
+		}
 		if($scope.dataServer==angular.toJson(temp)) return; // no need to update
 
 		$scope.updateStatus='Updating';

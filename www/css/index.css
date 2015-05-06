@@ -1,5 +1,5 @@
 body { margin-top:30px; }
-td { white-space: nowrap; }
+/* td { white-space: nowrap; } */
 /*
 This shows up too tight on iOS
 select { width:1em; }

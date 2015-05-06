@@ -18,6 +18,7 @@ function Controller1($scope) {
 					for(var i in rt) {
 						$scope.data[i].isf=rt[i].isf;
 						$scope.data[i].pml=rt[i].pml;
+						if(rt[i].dm) $scope.data[i].dm=rt[i].dm;
 						dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
 					}
 					$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
@@ -54,10 +55,17 @@ function Controller1($scope) {
 			.length==0; };
 
 	$scope.areas=["B","G","R","Z","S","T","D","J","M","N","O"];
+	$scope.cartypes=["Private cars", "Motorcycles", "Mass public transport trucks", "Taxis", "Public buses & minibuses", "Private transport vehicles", "Other private vehicles: Ambulances, etc..."];
+	$scope.horsepowers=["1 - 10", "11-20", "21-30", "31-40", "41-50", "51 and above"];
+	$scope.years=["2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001 and before"];
+
+	$scope.addReset=function() {
+		$scope.addC={'n':'','a':'','l':''};
+	};
 
 	$scope.add=function() {
 		$scope.addCore($scope.addC,false);
-		$scope.addC={'n':'','a':'','l':''};
+		$scope.addReset();
 	}
 	$scope.addCore=function(xxx,isChild) {
 	// xxx:   {"n":n,"a":a,"l":l};
@@ -100,7 +108,19 @@ function Controller1($scope) {
 	$scope.hideAdd=function() { $('#addModal').modal('hide'); };
 	$scope.showDisclaimer=function() { $('#disclaimerModal').modal('show'); };
 	$scope.hideDisclaimer=function() { $('#disclaimerModal').modal('hide'); };
-	$scope.getCarRowClass=function(a,n) { return ($scope.data[an2id(a,n)].isf!='None'||$scope.data[an2id(a,n)].pml!='None'?"lightpink":"white"); console.log($scope.data[an2id(a,n)]); };
+	$scope.getCarRowClass=function(a,n) {
+		temp=$scope.data[an2id(a,n)];
+		if(temp.isf!='None'||temp.pml!='None') {
+			return "danger"; //lightpink"; 
+		} else {
+			if(temp.dm=="There are no results matching the specifications you've entered...") {
+				return "info"; //orange";
+			} else {
+				return ""; //"white";
+			}
+		}
+		//console.log($scope.data[an2id(a,n)]);
+	};
 
 	$scope.dataDateVsToday=function() {
 		if($scope.momentFormat2($scope.tnow)!=$scope.momentFormat2($scope.dataTs)) return "text-danger bg-danger"; else return "";
