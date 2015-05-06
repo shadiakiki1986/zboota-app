@@ -1,7 +1,7 @@
 I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
-=1.2.0=
+=tip=
 * added mechanique on server and supporting it in app
 * replaced some text with glyphicons
 * added highlighting of invalid mechanique result
