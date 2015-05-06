@@ -32,20 +32,24 @@
 			</div>
 		</div>
 		<div class="modal" id="loginModal" aria-hidden="true" hidden data-backdrop="static">
+	<div class="modal-dialog">
+      <div class="modal-content">
 
 			<div class="modal-header">
        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				Enter your email <span ng-show="loginType!='New'"> and password</span>
 			</div>
 			<div class="modal-body">
-				<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'"/> <br>
-				<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'&&loginType=='Log in'" /> <br>
+				<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'" class="form-control"/> <br>
+				<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'&&loginType=='Log in'" class="form-control" /> <br>
 			</div>
-			<div class="modal-footer pull-left" align="left">
+			<div class="modal-footer">
 				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Log in</button> &nbsp;
 				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-warning">Forgot password</button> &nbsp;
 				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email" class="btn btn-primary">Create</button> &nbsp;
 			</div>
+		</div>
+		</div>
 		</div>
 	</div>
 
@@ -117,7 +121,7 @@
 			Year of model: &nbsp; <select ng-model="addC.y" class="dropdown form-control"><option ng-repeat="a in years" ng-value="a">{{a}}</option></select> <br>
 			Type: &nbsp; <select ng-model="addC.t" class="dropdown form-control"><option ng-repeat="a in cartypes" ng-value="a">{{a}}</option></select> <br>
 		</div>
-		<div class="modal-footer pull-left">
+		<div class="modal-footer">
 			<button ng-click="add();" class="btn btn-primary" ng-disabled="!addC.a||!addC.n||!addC.l||!((!addC.y&&!addC.hp&&!addC.t)||(addC.y&&addC.hp&&addC.t))">Add</button> &nbsp;
 			<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;
 		</div>
