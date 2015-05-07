@@ -5,7 +5,11 @@ set -e
 cordova build android --release
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/zboota-app.keystore ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk zboota-app
 jarsigner -verify -verbose -certs ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk
-rm -i ~/zboota-app-release-signed.apk
+fn=~/zboota-app-release-signed.apk
+if [ -f $fn ]
+then
+	rm -i $fn
+fi
 $ANDROID_HOME/build-tools/21.1.2/zipalign -v 4 ~/zboota-app/platforms/android/ant-build/CordovaApp-release-unsigned.apk ~/zboota-app-release-signed.apk
 
 
