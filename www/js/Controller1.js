@@ -12,13 +12,21 @@ function Controller1($scope) {
 			data: {lpns:JSON.stringify($scope.data)},
 			dataType: 'json',
 			success: function(rt) {
-				if(rt.hasOwnProperty("error")) alert("Zboota server error: "+rt.error);
+				if(rt.hasOwnProperty("error")) {
+					alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
+					console.log("error, "+rt.error);
+					return;
+				}
 				$scope.$apply(function() {
 					dataTsAll=[];
 					for(var i in rt) {
 						$scope.data[i].isf=rt[i].isf;
 						$scope.data[i].pml=rt[i].pml;
-						if(rt[i].dm) $scope.data[i].dm=rt[i].dm;
+						if(rt[i].dm) {
+							$scope.data[i].dm=rt[i].dm;
+						} else {
+							if($scope.data[i].hasOwnProperty("dm") && $scope.data[i].dm!="") delete $scope.data[i].dm;
+						}
 						dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
 					}
 					$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
@@ -55,29 +63,34 @@ function Controller1($scope) {
 			.length==0; };
 
 	$scope.areas=["B","G","R","Z","S","T","D","J","M","N","O"];
-	$scope.cartypes=["Private cars", "Motorcycles", "Mass public transport trucks", "Taxis", "Public buses & minibuses", "Private transport vehicles", "Other private vehicles: Ambulances, etc..."];
-	$scope.horsepowers=["1 - 10", "11-20", "21-30", "31-40", "41-50", "51 and above"];
-	$scope.years=["2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001 and before"];
+	$scope.cartypes=["","Private cars", "Motorcycles", "Mass public transport trucks", "Taxis", "Public buses & minibuses", "Private transport vehicles", "Other private vehicles: Ambulances, etc..."];
+	$scope.horsepowers=["","1 - 10", "11-20", "21-30", "31-40", "41-50", "51 and above"];
+	$scope.years=["","2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001 and before"];
 
 	$scope.addReset=function() {
 		$scope.addC={'n':'','a':'','l':''};
+		$scope.editStatus=false;
 	};
 
 	$scope.add=function() {
 		$scope.addCore($scope.addC,false);
+		$scope.get();
 		$scope.addReset();
-	}
+		$scope.hideAdd();
+	};
+
 	$scope.addCore=function(xxx,isChild) {
 	// xxx:   {"n":n,"a":a,"l":l};
 		myscope=$scope;
-		if(!myscope.data.hasOwnProperty(an2id(xxx.a,xxx.n))) {
-			myscope.data[an2id(xxx.a,xxx.n)]=xxx; 
-			window.localStorage.setItem('data',angular.toJson(myscope.data));
-			if(!isChild) myscope.$broadcast('requestUpdate');
-			$scope.get();
-			$scope.hideAdd();
-		}
-	}
+		if(myscope.editStatus) if(myscope.editStatus!=an2id(xxx.a,xxx.n)) delete myscope.data[myscope.editStatus]; // this is the case when the editing involves change the area code and/or number
+		if(xxx.hasOwnProperty("y")&&xxx.y=="") delete xxx.y;
+		if(xxx.hasOwnProperty("hp")&&xxx.hp=="") delete xxx.hp;
+		if(xxx.hasOwnProperty("t")&&xxx.t=="") delete xxx.t;
+
+		myscope.data[an2id(xxx.a,xxx.n)]=xxx; 
+		window.localStorage.setItem('data',angular.toJson(myscope.data));
+		if(!isChild) myscope.$broadcast('requestUpdate');
+	};
 
 	$scope.serverAvailable=false;
 	$scope.pingServer=function() {
@@ -99,7 +112,7 @@ function Controller1($scope) {
 			if(wlsgi1!==null) { $scope.data=angular.fromJson(wlsgi1); }
 			if(wlsgi2!==null) { $scope.dataTs=angular.fromJson(wlsgi2); }
 		});
-		setInterval(function() { $scope.$apply(function() { $scope.tnow=new Date();}); }, 1000);
+		setInterval(function() { $scope.$apply(function() { $scope.tnow=new Date();}); }, 60000);
 	});
 
 	$scope.$on('requestAddCore', function(event,fn) { $scope.addCore(fn,true); });
@@ -110,20 +123,50 @@ function Controller1($scope) {
 	$scope.hideDisclaimer=function() { $('#disclaimerModal').modal('hide'); };
 	$scope.getCarRowClass=function(a,n) {
 		temp=$scope.data[an2id(a,n)];
-		if(temp.isf!='None'||temp.pml!='None') {
-			return "danger"; //lightpink"; 
+		if(temp.isf=='Not available'||temp.pml=='Not available'||mechIsCurrentMonth(a,n)||temp.dm=="There are no results matching the specifications you've entered...") {
+			return "info";
 		} else {
-			if(temp.dm=="There are no results matching the specifications you've entered...") {
-				return "info"; //orange";
+			if(temp.isf!='None'||temp.pml!='None'||mechIsCurrentMonth(a,n)) {
+				return "danger"; //lightpink"; 
 			} else {
-				return ""; //"white";
+				return ""; //orange";
 			}
 		}
-		//console.log($scope.data[an2id(a,n)]);
 	};
 
 	$scope.dataDateVsToday=function() {
 		if($scope.momentFormat2($scope.tnow)!=$scope.momentFormat2($scope.dataTs)) return "text-danger bg-danger"; else return "";
+	};
+
+	$scope.editStatus=false;
+	$scope.edit=function(a,n) {
+		$scope.editStatus=an2id(a,n);
+		$scope.addC=angular.fromJson(angular.toJson($scope.data[an2id(a,n)]));
+		$scope.showAdd();
+	};
+	$scope.addCisInvalid=function() {
+		var addC=$scope.addC;
+		if(addC) {
+			return !addC.a||!addC.n||!addC.l||!((!addC.y&&!addC.hp&&!addC.t)||(addC.y&&addC.hp&&addC.t));
+		} else {
+			return true;
+		}
+	};
+
+	mechIsCurrentMonth=function(a,n) {
+		d=$scope.data[an2id(a,n)];
+		if(!d.dm) {
+			return false;
+		} else {
+			if(d.dm=="Mechanique: There are no results matching the specifications you've entered...") {
+				return false;
+			} else {
+				m=d.dm.replace(/.* LL, due in (.*), mandatory inspection: .*/g, "$1");
+				m2=new Date().getMonth();
+				months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+				return(m==m2);
+			}
+		}
 	};
 
 };

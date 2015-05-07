@@ -61,7 +61,7 @@ function Controller2($scope) {
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert("Error updating server. "+textStatus+","+errorThrown);
 			},
-			complete: function() { $scope.updateStatus='None'; }
+			complete: function() { $scope.$apply(function() { $scope.updateStatus='None'; }); }
 		});
 	};
 
