@@ -32,8 +32,13 @@
 			</div>
 			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
 			<div class="pull-left">
+				<!--
+				Didn't work on android
 				<span ng-show="getStatus=='Requesting'||loginStatus=='Logging in'" class="blinking">&#x25BC</span>
 				<span ng-show="updateStatus=='Updating'" class="blinking">&#x25B2</span>
+				-->
+				<span ng-show="getStatus=='Requesting'||loginStatus=='Logging in'"><img src="img/arrow_down.gif" /></span>
+				<span ng-show="updateStatus=='Updating'"><img src="img/arrow_up.gif" /></span>
 			</div>
 		</div>
 		<div class="modal" id="loginModal" aria-hidden="true" hidden data-backdrop="static">
@@ -85,7 +90,8 @@
 				<div ng-if="rd.pml">
 					PML: &nbsp; {{rd.pml}}
 				</div>
-				<div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'" class="blinking">&#x25BC</div>
+				<!-- didnt work on android   <div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'" class="blinking">&#x25BC</div> -->
+				<div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'"><img src="img/arrow_down.gif" /></div>
 			</td>
 			<td rowspan={{rd.dm?2:1}}>
 				<button ng-click="edit(rd.a,rd.n)" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span></button>

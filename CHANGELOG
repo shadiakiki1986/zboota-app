@@ -11,6 +11,7 @@ http://semver.org/
 * highlight if mechanique in current month or if servers were not available
 * support for header
 * moved delete button inside of edit
+* replaced blinking animation wtih gif
 
 2015-05-06
 * added mechanique on server and supporting it in app
