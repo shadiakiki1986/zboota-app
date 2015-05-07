@@ -164,7 +164,7 @@ function Controller1($scope) {
 				m=d.dm.replace(/.* LL, due in (.*), mandatory inspection: .*/g, "$1");
 				m2=new Date().getMonth();
 				months=["January","February","March","April","May","June","July","August","September","October","November","December"];
-				return(m==m2);
+				return(m==months[m2]);
 			}
 		}
 	};

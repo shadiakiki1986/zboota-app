@@ -7,6 +7,7 @@ http://semver.org/
 * aesthetics
 * highlight if mechanique in current month or if servers were not available
 * support for header
+* moved delete button inside of edit
 
 2015-05-06
 * added mechanique on server and supporting it in app
