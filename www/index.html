@@ -97,7 +97,7 @@
 				<button ng-click="edit(rd.a,rd.n)" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span></button>
 			</td>
 		</tr>
-		<tr ng-if="rd.dm" class="{{getCarRowClass(rd.a,rd.n)}}"><td colspan=2><small>Mechanique: {{rd.dm}}</small></td></tr>
+		<tr ng-if="rd.dm" class="{{getCarRowClass(rd.a,rd.n)}}"><td colspan=2 style="padding-left:20px"><small>Mechanique: {{rd.dm}}</small></td></tr>
 	</tbody>
 	<tr ng-show="noData()">
 		<td colspan=3 class="text-center">No cars added</td>
@@ -147,13 +147,13 @@
 			</div>
 		</div>
 		<div class="modal-footer row">
-			<div class="pull-left"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> &nbsp; Delete</button></div>
+			<div class="pull-left"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> &nbsp; Del</button></div>
 			<div class="pull-right">
 				<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()">
 					<span ng-show="!editStatus"><span class="glyphicon glyphicon-plus"></span> &nbsp; Add</span>
 					<span ng-show=" editStatus"><span class="glyphicon glyphicon-ok"></span> &nbsp; Save</span>
 				</button> &nbsp;
-				<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;
+				<!--<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;-->
 			</div>
 		</div>
 		</div>
