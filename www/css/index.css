@@ -27,3 +27,7 @@ Below worked in firefox, but replaced with gif because didn't work on android
     }
 }
 */
+.imgprvw{
+    width:100%;
+    max-width:100px;
+}

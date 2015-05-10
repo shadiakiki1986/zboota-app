@@ -169,4 +169,9 @@ function Controller1($scope) {
 		}
 	};
 
+	$scope.photos={};
+	$scope.showphoto=function(a,n) {
+		return $scope.photos[an2id(a,n)];
+	};
+
 };
