@@ -19,6 +19,11 @@
 </head>
 <body>
 <div ng-controller="Controller1" class="container">
+	<div ng-show="!serverAvailable&&pingStatus.a!=0" class="alert alert-danger text-center alert-dismissible">
+		<span class="glyphicon glyphicon-alert"></span> &nbsp; It seems that the server is currently unavailable. Please check your internet connection, or try again in a few minutes.
+			<button ng-click="pingServer()" class="btn btn-small btn-warning" ng-disabled="pingStatus.b==1">Try again</button>
+	</div>
+
 	<div ng-controller="Controller3" ng-show="message" class="alert alert-info text-center alert-dismissible">
 		<span class="glyphicon glyphicon-alert"></span> &nbsp; {{message}}
 	</div>
@@ -28,8 +33,8 @@
 			<div class="text-muted pull-left"><img src="img/logo-57.png" /><!-- Zboota--></div>
 			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
 				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
-				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
-				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
+				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
+				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
 			</div>
 			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
 			<div class="pull-left">
@@ -55,7 +60,7 @@
 				<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'&&loginType=='Log in'" class="form-control" /> <br>
 			</div>
 			<div class="modal-footer">
-				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||!loginU.pass" class="btn btn-primary">Log in</button> &nbsp;
+				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginInvalid()" class="btn btn-primary">Log in</button> &nbsp;
 				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-warning">Forgot password</button> &nbsp;
 				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email" class="btn btn-primary">Create</button> &nbsp;
 			</div>
@@ -71,14 +76,36 @@
 		<th colspan=2 class="text-center">Zboota</th>
 		<th>
 			<!--<button ng-click="clear()" class="btn btn-danger">Clear</button>-->
-			<button ng-click="get();" ng-disabled="(getStatus!='None' || !serverAvailable)" class="btn btn-success btn-small"><span class="glyphicon glyphicon-refresh"></span></button>
+			<button ng-click="get()" ng-disabled="(getStatus!='None' || !serverAvailable)" class="btn btn-success btn-small"><span class="glyphicon glyphicon-refresh"></span></button>
 		</th>
 	</tr>
 	<tbody ng-repeat="rd in data">
-		<tr class="{{getCarRowClass(rd.a,rd.n)}}">
-			<td><!-- ng-show="photos.hasOwnProperty(an2id(rd.a,rd.n))">-->
-				<img ng-src="{{showphoto(rd.a,rd.n)}}" class="imgprvw">
+		<tr class="{{getCarRowClass(rd.a,rd.n)}}" ng-if="photoshow(rd.a,rd.n)">
+			<td>
+				<img ng-src="{{photoshow(rd.a,rd.n)}}" class="imgprvw"></div>
 			</td>
+			<td>
+				<div class="row">
+					<div class="pull-left">
+						<div>{{rd.l}}</div>
+						<div class="text-muted">{{rd.a}} &nbsp; {{rd.n}}</div>
+					</div>
+					<div class="pull-left">
+						&nbsp;&nbsp;
+					</div>
+					<div class="pull-left">
+						<div ng-if="rd.isf">ISF: &nbsp; {{rd.isf}}</div>
+						<div ng-if="rd.pml">PML: &nbsp; {{rd.pml}}</div>
+						<!-- didnt work on android   <div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'" class="blinking">&#x25BC</div> -->
+						<div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'"><img src="img/arrow_down.gif" /></div>
+					</div>
+				</div>
+			</td>
+			<td rowspan={{rd.dm?2:1}}>
+				<button ng-click="edit(rd.a,rd.n)" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span></button>
+			</td>
+		</tr>
+		<tr class="{{getCarRowClass(rd.a,rd.n)}}" ng-if="!photoshow(rd.a,rd.n)">
 			<td>
 				<span>{{rd.l}}</span>
 				<br>
@@ -88,12 +115,8 @@
 				</div> -->
 			</td>
 			<td>
-				<div ng-if="rd.isf">
-					ISF: &nbsp; {{rd.isf}}
-				</div>
-				<div ng-if="rd.pml">
-					PML: &nbsp; {{rd.pml}}
-				</div>
+				<div ng-if="rd.isf">ISF: &nbsp; {{rd.isf}}</div>
+				<div ng-if="rd.pml">PML: &nbsp; {{rd.pml}}</div>
 				<!-- didnt work on android   <div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'" class="blinking">&#x25BC</div> -->
 				<div ng-if="(!rd.isf || !rd.pml) && getStatus=='Requesting'"><img src="img/arrow_down.gif" /></div>
 			</td>
@@ -122,7 +145,7 @@
 	<div class="modal-dialog">
       <div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="addReset()"><span aria-hidden="true">&times;</span></button>
 			Enter car details
 		</div>
 		<div class="modal-body">
@@ -138,11 +161,11 @@
 			Optional (for mechanique):
 		      <div class="row">
 			<div class="col-xs-12">
-			      <div class="col-xs-2">Horse power</div>
+			      <div class="col-xs-2">Power</div>
 				<div class="col-xs-10"><select ng-model="addC.hp" class="dropdown form-control"><option ng-repeat="a in horsepowers" ng-value="a">{{a}}</option></select></div>
 			</div>
 			<div class="col-xs-12">
-			      <div class="col-xs-2">Year make</div>
+			      <div class="col-xs-2">Year</div>
 				<div class="col-xs-10"><select ng-model="addC.y" class="dropdown form-control"><option ng-repeat="a in years" ng-value="a">{{a}}</option></select></div>
 			</div>
 			<div class="col-xs-12">
@@ -160,7 +183,7 @@
 		<div class="modal-footer row">
 			<div class="pull-left"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> &nbsp; Del</button></div>
 			<div class="pull-right">
-				<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()">
+				<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()||!serverAvailable">
 					<span ng-show="!editStatus"><span class="glyphicon glyphicon-plus"></span> &nbsp; Add</span>
 					<span ng-show=" editStatus"><span class="glyphicon glyphicon-ok"></span> &nbsp; Save</span>
 				</button> &nbsp;

@@ -2,6 +2,13 @@ I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 =1.2.2=
+2015-05-11
+* getHeader and login upon serveravailable event instead of document load
+* alert of server unavalailable replaced with a 2nd danger header message
+* image saved locally
+* also improved design to accomodate for image
+
+2015-05-10
 * added photo, still needs some work
 
 =1.2.1=

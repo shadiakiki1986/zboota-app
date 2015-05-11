@@ -2,7 +2,16 @@ function Controller2($scope) {
 
 	$scope.loginStatus='None';
 	$scope.dataServer='{}';
+
+	$scope.loginReset=function() { $scope.loginU={email:'',pass:''}; };
+	$scope.loginReset();
+
+	$scope.loginInvalid=function() {
+		return $scope.loginStatus!='None'||$scope.getStatus!='None'||!$scope.loginU.email||!$scope.loginU.pass;
+	};
 	$scope.login=function() {
+		if($scope.loginInvalid()||!$scope.$parent.serverAvailable) return;
+
 		$scope.loginStatus='Logging in';
 		$.ajax({type:'POST',
 			url: ZBOOTA_SERVER_URL+'/api/login.php',
@@ -33,7 +42,7 @@ function Controller2($scope) {
 	};
 	$scope.updateStatus='None';
 	$scope.update=function() {
-		if($scope.loginStatus!='Logged in') return;
+		if($scope.loginInvalid()||!$scope.$parent.serverAvailable) return;
 
 		// drop the ISF and PML data so that only the area, number, and label are stored
 		temp=angular.fromJson(angular.toJson($scope.$parent.data));
@@ -67,6 +76,8 @@ function Controller2($scope) {
 
 	$scope.newUStatus="None";
 	$scope.newU=function() {
+		if($scope.loginInvalid()||!$scope.$parent.serverAvailable) return;
+
 		$scope.newUStatus='Registering';
 		$.ajax({type:'POST',
 			url: ZBOOTA_SERVER_URL+'/api/new.php',
@@ -88,9 +99,10 @@ function Controller2($scope) {
 		});
 	};
 
+
 	$scope.logout = function () {
 		window.localStorage.removeItem('loginU');
-		$scope.loginU={email:'',pass:''};
+		$scope.loginReset();
 		$scope.loginStatus='None';
 		$scope.dataServer='{}';
 	};
@@ -102,12 +114,13 @@ function Controller2($scope) {
 		$scope.$apply(function() {
 			if(wlsgi1!==null) {
 				$scope.loginU=angular.fromJson(wlsgi1);
-				$scope.login();
+				// This is cancelled in favor of the "serverAvailable" event below // if($scope.$parent.serverAvailable) $scope.login();
 			}
 		});
 	});
 
 	$scope.$on('requestUpdate', function(event,fn) { $scope.update(); });
+	$scope.$on('serverAvailable', function(event,fn) { $scope.login(); });
 
 	$scope.showLogin=function() { $scope.loginType='Log in'; $('#loginModal').modal('show'); };
 	$scope.hideLogin=function() { $('#loginModal').modal('hide'); };
@@ -125,7 +138,7 @@ function Controller2($scope) {
 					alert("Zboota forgot password error: "+rt.error);
 					return;
 				}
-				alert("Your password has been emailed to you. Please check in a few minutes.");
+				alert("Your password has been emailed to you. Please check your email inbox, and possibly the junk mail folder, in a few minutes.");
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert("Error in forgot password. "+textStatus+","+errorThrown);

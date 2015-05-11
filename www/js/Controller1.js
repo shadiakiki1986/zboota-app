@@ -6,6 +6,8 @@ function Controller1($scope) {
 
 	$scope.dataTs=null;
 	$scope.get = function() {
+		if(!$scope.serverAvailable) return;
+
 		$scope.getStatus="Requesting";
 		$.ajax({type:'POST',
 			url: ZBOOTA_SERVER_URL+'/api/get.php',
@@ -34,7 +36,10 @@ function Controller1($scope) {
 					window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
 				});
 			},
-			error: function(rt,et,ts) { alert("Error getting zboota from server. "+et+";"+ts); },
+			error: function(rt,et,ts) {
+				alert("Error getting zboota from server. "+et+";"+ts);
+				$scope.pingServer();
+			},
 			complete: function() { $scope.$apply(function() { $scope.getStatus="None"; }); }
 
 		});
@@ -93,11 +98,26 @@ function Controller1($scope) {
 	};
 
 	$scope.serverAvailable=false;
+	$scope.pingStatus={a:0,b:0};
 	$scope.pingServer=function() {
+		$scope.pingStatus.b=1;
 		$.ajax({type:'GET',
 			url: ZBOOTA_SERVER_URL+'/api/get.php',
-			success: function(rt) { $scope.$apply(function() { $scope.serverAvailable=true; }); },
-			error: function(rt,et,ts) { $scope.$apply(function() { $scope.serverAvailable=false; }); alert("Server"+ZBOOTA_SERVER_URL+" unavailable. "+et+";"+ts); },
+			success: function(rt) {
+				$scope.$apply(function() {
+					$scope.serverAvailable=true;
+					$scope.$broadcast('serverAvailable');
+					$scope.pingStatus.b=0;
+				});
+			},
+			error: function(rt,et,ts) {
+				$scope.$apply(function() {
+					$scope.serverAvailable=false;
+					$scope.pingStatus.b=2;
+				});
+				////alert("Server"+ZBOOTA_SERVER_URL+" unavailable. "+et+";"+ts);
+			},
+			complete: function() { $scope.$apply(function() { $scope.pingStatus.a=1; }); }
 		});
 	};
 
@@ -170,8 +190,9 @@ function Controller1($scope) {
 	};
 
 	$scope.photos={};
-	$scope.showphoto=function(a,n) {
-		return $scope.photos[an2id(a,n)];
+	$scope.photoshow=function(a,n) {
+		id=an2id(a,n);
+		if(!$scope.photos.hasOwnProperty(id)) return false; else return $scope.photos[id];
 	};
 
 };

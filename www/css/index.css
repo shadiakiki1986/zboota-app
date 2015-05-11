@@ -1,4 +1,4 @@
-body { margin-top:30px; }
+body { margin-top:30px; } /* ios top battery, signal, ... */
 /* td { white-space: nowrap; } */
 /*
 This shows up too tight on iOS
@@ -29,5 +29,5 @@ Below worked in firefox, but replaced with gif because didn't work on android
 */
 .imgprvw{
     width:100%;
-    max-width:100px;
+    max-width:50px;
 }
