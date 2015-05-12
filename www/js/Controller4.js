@@ -1,5 +1,30 @@
 function Controller4($scope) {
 
+
+	$scope.$parent.uploadPhotoStatus=false;
+	uploadPhoto=function(file) {
+		// http://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
+		var data = new FormData();
+		data.append('image_file', file);
+		$scope.$parent.uploadPhotoStatus=true;
+		$.ajax({
+			url: ZBOOTA_SERVER_URL+'/api/uploadPhoto.php',
+			type: 'POST',
+			data: data,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(text) {
+				$scope.$parent.addC.photoUrl=text;
+			},
+			error: function() { console.log("Error in upload"); },
+			complete: function() {
+				$scope.$apply(function() { $scope.$parent.uploadPhotoStatus=false; });
+			}
+		});
+	};
+
+
 	$scope.addPhoto=function() {
 	    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 	      alert('The File APIs are not fully supported in this browser.');
@@ -18,24 +43,44 @@ function Controller4($scope) {
 	    }
 	    else {
 	      file = input.files[0];
+
+		//allow only valid image file types
+		switch(file.type)
+		{
+		    case 'image/png': case 'image/gif': case 'image/jpeg': case 'image/pjpeg':
+			break;
+		    default:
+			alert("Unsupported image type. Please use png, gif, jpeg, or pjpeg");
+			return false
+		}
+
+		//Allowed file size is less than 1 MB (1048576)
+		if(file.size>1048576)
+		{   
+		    alert("Too big Image file! Please reduce the size of your photo using an image editor.");
+		    return false
+		}
+
 		var filerdr = new FileReader();
 		filerdr.onload = function(e) {
 			$('#imgprvw').attr('src', e.target.result);
-			$scope.$apply(function() { $scope.$parent.photos[an2id($scope.$parent.addC.a,$scope.$parent.addC.n)]=e.target.result; });
-			//console.log($scope.$parent.photos);
-                        window.localStorage.setItem('photos',angular.toJson($scope.$parent.photos));
+			$scope.$apply(function() { $scope.$parent.addC.photo=e.target.result; });
 		}
 		filerdr.readAsDataURL(input.files[0]);
 
-	    }
+		uploadPhoto(file);
+	      }
 	};
 
+	$scope.rmPhoto=function() {
+		delete $scope.$parent.addC.photo;
+	}
 
-        angular.element(document).ready(function () {
-                photos=window.localStorage.getItem('photos');
-                $scope.$apply(function() {
-                        if(photos!==null) { $scope.$parent.photos=angular.fromJson(photos); }
-                });
-        });
+
+	$scope.photoshow4=function() {
+		if(!$scope.$parent.addC) {
+			return false;
+		} else if( !$scope.$parent.addC.hasOwnProperty('photo')) return false; else return $scope.$parent.addC.photo;
+	};
 
 };

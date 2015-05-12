@@ -1,6 +1,7 @@
 function Controller1($scope) {
 
 	$scope.data={};
+	$scope.photos={};
 
 	$scope.getStatus="None";
 
@@ -51,7 +52,9 @@ function Controller1($scope) {
 
 	$scope.del=function(a,n) {
 		delete $scope.data[an2id(a,n)];
+		delete $scope.photos[an2id(a,n)];
 		window.localStorage.setItem('data',angular.toJson($scope.data));
+		window.localStorage.setItem('photos',angular.toJson($scope.photos));
 		$scope.$broadcast('requestUpdate');
 		if($scope.noData2()) {
 			$scope.dataTs=null;
@@ -75,11 +78,14 @@ function Controller1($scope) {
 	$scope.addReset=function() {
 		$scope.addC={'n':'','a':'','l':''};
 		$scope.editStatus=false;
+		input = document.getElementById('image1');
+		if(input!=null) input.value="";
+
 	};
 
 	$scope.add=function() {
 		$scope.addCore($scope.addC,false);
-		$scope.get();
+		$scope.get(); // to get info of newly added car or edited car
 		$scope.addReset();
 		$scope.hideAdd();
 	};
@@ -87,14 +93,33 @@ function Controller1($scope) {
 	$scope.addCore=function(xxx,isChild) {
 	// xxx:   {"n":n,"a":a,"l":l};
 		myscope=$scope;
-		if(myscope.editStatus) if(myscope.editStatus!=an2id(xxx.a,xxx.n)) delete myscope.data[myscope.editStatus]; // this is the case when the editing involves change the area code and/or number
+		if(myscope.editStatus) if(myscope.editStatus!=an2id(xxx.a,xxx.n)) {
+			delete myscope.data[myscope.editStatus]; // this is the case when the editing involves change the area code and/or number
+			delete myscope.photos[myscope.editStatus];
+		}
 		if(xxx.hasOwnProperty("y")&&xxx.y=="") delete xxx.y;
 		if(xxx.hasOwnProperty("hp")&&xxx.hp=="") delete xxx.hp;
 		if(xxx.hasOwnProperty("t")&&xxx.t=="") delete xxx.t;
 
-		myscope.data[an2id(xxx.a,xxx.n)]=xxx; 
+		// split out photo
+		photo=null;
+		if(xxx.hasOwnProperty("photo")) { photo=xxx.photo; delete xxx.photo; }
+
+		myscope.data[an2id(xxx.a,xxx.n)]=xxx;
+		if(photo!=null) myscope.photos[an2id(xxx.a,xxx.n)]=photo;
+
 		window.localStorage.setItem('data',angular.toJson(myscope.data));
+		window.localStorage.setItem('photos',angular.toJson(myscope.photos));
+
 		if(!isChild) myscope.$broadcast('requestUpdate');
+
+		// check if need to get image
+		id=an2id(xxx.a,xxx.n);
+		if(xxx.hasOwnProperty('photoUrl') && ($scope.data[id].photoUrl!=xxx.photoUrl || !$scope.photoshow1(xxx.a,xxx.n))) {
+			console.log("Need to get photo "+xxx.photoUrl+" for "+id);
+		}
+
+
 	};
 
 	$scope.serverAvailable=false;
@@ -123,24 +148,24 @@ function Controller1($scope) {
 
 	angular.element(document).ready(function () {
 		$scope.hideAdd();
-		$('#disclaimerModal').modal('hide');
 
 		$scope.pingServer();
 		wlsgi1=window.localStorage.getItem('data');
 		wlsgi2=window.localStorage.getItem('dataTs');
+		photos=window.localStorage.getItem('photos');
 		$scope.$apply(function() {
 			if(wlsgi1!==null) { $scope.data=angular.fromJson(wlsgi1); }
 			if(wlsgi2!==null) { $scope.dataTs=angular.fromJson(wlsgi2); }
+			if(photos!==null) { $scope.photos=angular.fromJson(photos); }
 		});
 		setInterval(function() { $scope.$apply(function() { $scope.tnow=new Date();}); }, 60000);
+
 	});
 
 	$scope.$on('requestAddCore', function(event,fn) { $scope.addCore(fn,true); });
 
 	$scope.showAdd=function() { $('#addModal').modal('show'); };
 	$scope.hideAdd=function() { $('#addModal').modal('hide'); };
-	$scope.showDisclaimer=function() { $('#disclaimerModal').modal('show'); };
-	$scope.hideDisclaimer=function() { $('#disclaimerModal').modal('hide'); };
 	$scope.getCarRowClass=function(a,n) {
 		temp=$scope.data[an2id(a,n)];
 		if(temp.isf=='Not available'||temp.pml=='Not available'||mechIsCurrentMonth(a,n)||temp.dm=="There are no results matching the specifications you've entered...") {
@@ -162,6 +187,8 @@ function Controller1($scope) {
 	$scope.edit=function(a,n) {
 		$scope.editStatus=an2id(a,n);
 		$scope.addC=angular.fromJson(angular.toJson($scope.data[an2id(a,n)]));
+		ps1=$scope.photoshow1(a,n);
+		if(ps1) $scope.addC.photo=angular.fromJson(angular.toJson(ps1)); // recuperating photo
 		$scope.showAdd();
 	};
 	$scope.addCisInvalid=function() {
@@ -189,8 +216,7 @@ function Controller1($scope) {
 		}
 	};
 
-	$scope.photos={};
-	$scope.photoshow=function(a,n) {
+	$scope.photoshow1=function(a,n) {
 		id=an2id(a,n);
 		if(!$scope.photos.hasOwnProperty(id)) return false; else return $scope.photos[id];
 	};
