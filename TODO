@@ -1,3 +1,6 @@
 * document api in zboota-server
 * make zboota-server public repo
 * download photo
+** this is in case of logged in user
+** no need to upload photo if user not logged in
+** I get a security error in the current implementation

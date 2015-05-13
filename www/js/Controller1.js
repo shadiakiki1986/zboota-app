@@ -117,10 +117,22 @@ function Controller1($scope) {
 		id=an2id(xxx.a,xxx.n);
 		if(xxx.hasOwnProperty('photoUrl') && ($scope.data[id].photoUrl!=xxx.photoUrl || !$scope.photoshow1(xxx.a,xxx.n))) {
 			console.log("Need to get photo "+xxx.photoUrl+" for "+id);
+			// http://stackoverflow.com/a/16566198
+			// but https://html.spec.whatwg.org/multipage/scripting.html#dom-canvas-todataurl
+			var img = new Image();
+			img.onload = function () {
+				var canvas = document.createElement("canvas");
+				canvas.width =this.width;
+				canvas.height =this.height;
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(this, 0, 0);
+				var dataURL = canvas.toDataURL("image/png");
+				myscope.$apply(function() { myscope.photos[an2id(xxx.a,xxx.n)]=dataURL; });
+			};
+			img.src = ZBOOTA_SERVER_URL+'/api/loadPhoto.php?name='+xxx.photoUrl;
+
 		}
-
-
-	};
+	}; // end addCore
 
 	$scope.serverAvailable=false;
 	$scope.pingStatus={a:0,b:0};

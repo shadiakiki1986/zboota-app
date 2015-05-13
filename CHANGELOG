@@ -2,6 +2,10 @@ I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 =1.2.2=
+2015-05-13
+* moved "Uploading image" to next to save, del
+* working on loading uploaded photo
+
 2015-05-12
 * photo gets uploaded to server (on top of being stored locally)
 

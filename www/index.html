@@ -182,20 +182,20 @@
 				<div ng-if=" photoshow4()">
 	       				<button class="close" ng-click="rmPhoto()"><span class="glyphicon glyphicon-remove"></span></button>
 					<img ng-src="{{photoshow4()}}" id="imgprvw" class="imgprvw2">
-					<div ng-show="uploadPhotoStatus">Uploading...</div>
 				</div>
 			</div>
 		</div><!-- end body -->
 		<div class="modal-footer">
 			<div class="row">
-			<div class="pull-right">
-				<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()||!serverAvailable||uploadPhotoStatus">
-					<span ng-show="!editStatus"><span class="glyphicon glyphicon-plus"></span> &nbsp; Add</span>
-					<span ng-show=" editStatus"><span class="glyphicon glyphicon-ok"></span> &nbsp; Save</span>
-				</button> &nbsp;
-				<!--<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;-->
-			</div>
-			<div class="pull-right"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> &nbsp; Del</button>&nbsp;</div>
+				<div class="pull-right">
+					<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()||!serverAvailable||uploadPhotoStatus">
+						<span ng-show="!editStatus"><span class="glyphicon glyphicon-plus"></span> &nbsp; Add</span>
+						<span ng-show=" editStatus"><span class="glyphicon glyphicon-ok"></span> &nbsp; Save</span>
+					</button> &nbsp;
+					<!--<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;-->
+				</div>
+				<div class="pull-right"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> &nbsp; Del</button>&nbsp;</div>
+				<div class="pull-right" ng-show="uploadPhotoStatus">Uploading image...</div>
 			</div><!-- end row -->
 		</div><!-- end footer -->
 		</div><!-- end content -->
