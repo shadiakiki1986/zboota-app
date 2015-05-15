@@ -110,18 +110,13 @@ function Controller1($scope, $http) {
 		photo=null;
 		if(xxx.hasOwnProperty("photo")) { photo=xxx.photo; delete xxx.photo; }
 
-		myscope.data[an2id(xxx.a,xxx.n)]=xxx;
-		if(photo!=null) myscope.photos[an2id(xxx.a,xxx.n)]=photo;
-
-		window.localStorage.setItem('data',angular.toJson(myscope.data));
-		window.localStorage.setItem('photos',angular.toJson(myscope.photos));
-
-		if(!isChild) myscope.$broadcast('requestUpdate');
-
 		// check if need to get image
+		// including in case where the image stored in localStorage is the dataurl of the original image, hence reloading the image from the server can yield a shorter dataurl
+		// This also serves that the image was not showing up on my tablet
 		id=an2id(xxx.a,xxx.n);
-		if(xxx.hasOwnProperty('photoUrl') && (myscope.data[id].photoUrl!=xxx.photoUrl || !myscope.photoshow1(xxx.a,xxx.n))) {
-			//console.log("Need to get photo "+xxx.photoUrl+" for "+id);
+//console.log(id,xxx.photoUrl,myscope.data[id].photoUrl);
+		if(xxx.hasOwnProperty('photoUrl') && (myscope.data[id].photoUrl!=xxx.photoUrl || !myscope.photoshow1(xxx.a,xxx.n) || xxx.photoUrl.length>180000)) {
+			console.log("Need to get photo "+xxx.photoUrl+" for "+id);
 
 			// http://stackoverflow.com/a/16566198
 			// but https://html.spec.whatwg.org/multipage/scripting.html#dom-canvas-todataurl
@@ -149,7 +144,28 @@ function Controller1($scope, $http) {
 					$scope.pingServer();
 				});
 
+		} // end check if need to get image
+		if(photo!=null) {
+			// just added photo
+			myscope.photos[id]=photo;
+		} else {
+			if(!isChild) {
+				// photo must have been deleted
+				// Cannot replace this with $scope.photoshow1 due to scope and calling this from Controller2
+				if(myscope.photoshow1(xxx.a,xxx.n)) { 
+					delete myscope.photos[id];
+				}
+			}
 		}
+
+		myscope.data[id]=angular.fromJson(angular.toJson(xxx));
+
+		window.localStorage.setItem('data',angular.toJson(myscope.data));
+		window.localStorage.setItem('photos',angular.toJson(myscope.photos));
+
+		if(!isChild) myscope.$broadcast('requestUpdate');
+
+
 	}; // end addCore
 
 	MAX_N_PING=3;
@@ -188,6 +204,7 @@ function Controller1($scope, $http) {
 		wlsgi1=window.localStorage.getItem('data');
 		wlsgi2=window.localStorage.getItem('dataTs');
 		photos=window.localStorage.getItem('photos');
+
 		$scope.$apply(function() {
 			if(wlsgi1!==null) { $scope.data=angular.fromJson(wlsgi1); }
 			if(wlsgi2!==null) { $scope.dataTs=angular.fromJson(wlsgi2); }

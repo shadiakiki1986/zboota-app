@@ -17,6 +17,14 @@ http://semver.org/
 * retested all app
 * data sources were wrongly placed outside of container
 * no need to get on first login
+* dropped unnecessary imgprvw.src from adding image
+* added redundant image upload/download when adding new image after displaying locally
+** even though this works on the browser
+** it doesn't on my tablet, so this is for that
+** the same is done with the thumbnail in the main list
+*** in case it's the dataurl of the original, overwrite with dataurl from server
+* addCore: reordering code a bit
+* editing image and/or removing an image was not really working..fixed
 
 2015-05-13
 * moved "Uploading image" to next to save, del
