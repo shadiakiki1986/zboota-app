@@ -21,7 +21,10 @@
 <div ng-controller="Controller1" class="container">
 	<div ng-show="!serverAvailable&&pingStatus.a!=0" class="alert alert-danger text-center alert-dismissible">
 		<span class="glyphicon glyphicon-alert"></span> &nbsp; It seems that the server is currently unavailable. Please check your internet connection, or try again in a few minutes.
-			<button ng-click="pingServer()" class="btn btn-small btn-warning" ng-disabled="pingStatus.b==1">Try again</button>
+			<button ng-click="pingServer(true)" class="btn btn-small btn-warning" ng-disabled="pingStatus.b==1">Try again</button>
+	</div>
+	<div ng-show="!serverAvailable&&pingStatus.a==0" class="alert alert-info text-center alert-dismissible">
+		<span class="glyphicon glyphicon-flash"></span> &nbsp; Connecting ...	
 	</div>
 
 	<div ng-controller="Controller3" ng-show="message" class="alert alert-info text-center alert-dismissible">
@@ -34,7 +37,7 @@
 			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
 				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small">Existing user</button>
-				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
+				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||loginStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small">New user</button>
 			</div>
 			<div ng-show="loginStatus=='Logged in'" class="pull-right">{{loginU.email}} &nbsp;</div>
 			<div class="pull-left">
@@ -44,7 +47,7 @@
 				<span ng-show="updateStatus=='Updating'" class="blinking">&#x25B2</span>
 				-->
 				<span ng-show="getStatus=='Requesting'||loginStatus=='Logging in'"><img src="img/arrow_down.gif" /></span>
-				<span ng-show="updateStatus=='Updating'"><img src="img/arrow_up.gif" /></span>
+				<span ng-show="updateStatus=='Updating'||uploadPhotoStatus>0"><img src="img/arrow_up.gif" /></span>
 			</div>
 		</div>
 		<div class="modal" id="loginModal" aria-hidden="true" hidden data-backdrop="static">
@@ -82,7 +85,7 @@
 	<tbody ng-repeat="rd in data">
 		<tr class="{{getCarRowClass(rd.a,rd.n)}}" ng-if="photoshow1(rd.a,rd.n)">
 			<td>
-				<img ng-src="{{photoshow1(rd.a,rd.n)}}" class="imgprvw"></div>
+				<img ng-src="{{photoshow1(rd.a,rd.n)}}" class="imgprvw">
 			</td>
 			<td>
 				<div class="row">
@@ -188,21 +191,18 @@
 		<div class="modal-footer">
 			<div class="row">
 				<div class="pull-right">
-					<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()||!serverAvailable||uploadPhotoStatus">
+					<button ng-click="add()" class="btn btn-primary" ng-disabled="addCisInvalid()"><!--||uploadPhotoStatus||!serverAvailable-->
 						<span ng-show="!editStatus"><span class="glyphicon glyphicon-plus"></span> &nbsp; Add</span>
 						<span ng-show=" editStatus"><span class="glyphicon glyphicon-ok"></span> &nbsp; Save</span>
 					</button> &nbsp;
 					<!--<button ng-click="hideAdd(); addReset()" class="btn">Cancel</button> &nbsp;-->
 				</div>
-				<div class="pull-right"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> &nbsp; Del</button>&nbsp;</div>
-				<div class="pull-right" ng-show="uploadPhotoStatus">Uploading image...</div>
+				<div class="pull-right"><button ng-click="hideAdd(); del(addC.a,addC.n); addReset();" class="btn btn-danger" ng-disabled="!dataHas(addC.a,addC.n)"><span class="glyphicon glyphicon-remove"></span> &nbsp; Del</button>&nbsp;</div>
 			</div><!-- end row -->
 		</div><!-- end footer -->
 		</div><!-- end content -->
 		</div><!-- end dialog -->
 	</div><!-- end modal -->
-
-</div><!-- end Controller1 -->
 
 	<div class="row">
 		Data sources
@@ -212,6 +212,9 @@
 		<li><a href="http://www.dawlati.gov.lb/en/mecanique">www.dawlati.gov.lb</a></li>
 		</ul>
 	</div>
+
+</div><!-- end Controller1 -->
+
 
 </body>
 </html>

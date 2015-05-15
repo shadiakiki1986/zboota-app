@@ -2,6 +2,22 @@ I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 =1.2.2=
+2015-05-15
+* loading uploaded photos for logged in users
+* uploading photo only for logged in users
+* jquery ajax converted to angular http for a few cases (the ones with more than one variable update or with function calls)
+* added photos while offline are uploaded along with new data when gone online
+* New button was being enabled while logging in .. fixed
+* blinking up arrow blinks while uploading photos
+* ping server: added timeout of 5 seconds, and Connecting message
+* added pingServer to all error cases
+** also added max ping safety limit
+** with force=true for Try Again
+* DEL button disabled for new cars
+* retested all app
+* data sources were wrongly placed outside of container
+* no need to get on first login
+
 2015-05-13
 * moved "Uploading image" to next to save, del
 * working on loading uploaded photo

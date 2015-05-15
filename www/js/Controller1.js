@@ -1,4 +1,4 @@
-function Controller1($scope) {
+function Controller1($scope, $http) {
 
 	$scope.data={};
 	$scope.photos={};
@@ -8,19 +8,22 @@ function Controller1($scope) {
 	$scope.dataTs=null;
 	$scope.get = function() {
 		if(!$scope.serverAvailable) return;
+		if(Object.keys($scope.data).length==0) return;
 
 		$scope.getStatus="Requesting";
-		$.ajax({type:'POST',
-			url: ZBOOTA_SERVER_URL+'/api/get.php',
+		$http({method:'POST',
+			url: ZBOOTA_SERVER_URL+'/api/get2.php',
 			data: {lpns:JSON.stringify($scope.data)},
-			dataType: 'json',
-			success: function(rt) {
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			}).
+			success( function(rt) {
+//console.log(rt);
 				if(rt.hasOwnProperty("error")) {
 					alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
 					console.log("error, "+rt.error);
 					return;
 				}
-				$scope.$apply(function() {
+				if(Object.keys(rt).length>0) {
 					dataTsAll=[];
 					for(var i in rt) {
 						$scope.data[i].isf=rt[i].isf;
@@ -35,21 +38,22 @@ function Controller1($scope) {
 					$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
 					window.localStorage.setItem('data',angular.toJson($scope.data));
 					window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
-				});
-			},
-			error: function(rt,et,ts) {
-				alert("Error getting zboota from server. "+et+";"+ts);
+				}
+				$scope.getStatus="None";
+			}).
+			error( function(et) {
+				console.log("Error getting zboota from server. "+et);
+				$scope.getStatus="None";
 				$scope.pingServer();
-			},
-			complete: function() { $scope.$apply(function() { $scope.getStatus="None"; }); }
-
-		});
+			})
+		;
 	};
 
 	$scope.clear=function() {
 		for(d in $scope.data) { $scope.del($scope.data[d].a,$scope.data[d].n); }
 	};
 
+	$scope.dataHas=function(a,n) { return $scope.data.hasOwnProperty(an2id(a,n)); };
 	$scope.del=function(a,n) {
 		delete $scope.data[an2id(a,n)];
 		delete $scope.photos[an2id(a,n)];
@@ -75,6 +79,7 @@ function Controller1($scope) {
 	$scope.horsepowers=["","1 - 10", "11-20", "21-30", "31-40", "41-50", "51 and above"];
 	$scope.years=["","2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001 and before"];
 
+	$scope.addC={'n':'','a':'','l':''};
 	$scope.addReset=function() {
 		$scope.addC={'n':'','a':'','l':''};
 		$scope.editStatus=false;
@@ -115,10 +120,12 @@ function Controller1($scope) {
 
 		// check if need to get image
 		id=an2id(xxx.a,xxx.n);
-		if(xxx.hasOwnProperty('photoUrl') && ($scope.data[id].photoUrl!=xxx.photoUrl || !$scope.photoshow1(xxx.a,xxx.n))) {
-			console.log("Need to get photo "+xxx.photoUrl+" for "+id);
+		if(xxx.hasOwnProperty('photoUrl') && (myscope.data[id].photoUrl!=xxx.photoUrl || !myscope.photoshow1(xxx.a,xxx.n))) {
+			//console.log("Need to get photo "+xxx.photoUrl+" for "+id);
+
 			// http://stackoverflow.com/a/16566198
 			// but https://html.spec.whatwg.org/multipage/scripting.html#dom-canvas-todataurl
+			/*
 			var img = new Image();
 			img.onload = function () {
 				var canvas = document.createElement("canvas");
@@ -130,32 +137,48 @@ function Controller1($scope) {
 				myscope.$apply(function() { myscope.photos[an2id(xxx.a,xxx.n)]=dataURL; });
 			};
 			img.src = ZBOOTA_SERVER_URL+'/api/loadPhoto.php?name='+xxx.photoUrl;
+			*/
+			$http.get(ZBOOTA_SERVER_URL+'/api/loadPhoto.php?name='+xxx.photoUrl)
+				.success( function(rt) {
+					id=an2id(xxx.a,xxx.n);
+					myscope.photos[id]=rt;
+					window.localStorage.setItem('photos',angular.toJson(myscope.photos));
+				}).
+				error( function(rt,et,ts) {
+					console.log("Failed to get photo "+xxx.photoUrl);
+					$scope.pingServer();
+				});
 
 		}
 	}; // end addCore
 
-	$scope.serverAvailable=false;
-	$scope.pingStatus={a:0,b:0};
-	$scope.pingServer=function() {
+	MAX_N_PING=3;
+	$scope.pingStatus={a:0,b:0,n:0};
+	$scope.pingServer=function(force) {
+		$scope.serverAvailable=false;
+
+		if(force) $scope.pingStatus.n=0; // reset counter
+		$scope.pingStatus.n+=1;
+		if($scope.pingStatus.n>MAX_N_PING) {
+			// disable pinging so as to avoid infinite loop of ping, server available, login, get, get error for some reason, ping, server available, login, get, get error, ping, ...
+			console.log("max ping reached");
+			return; 
+		}
 		$scope.pingStatus.b=1;
-		$.ajax({type:'GET',
-			url: ZBOOTA_SERVER_URL+'/api/get.php',
-			success: function(rt) {
-				$scope.$apply(function() {
-					$scope.serverAvailable=true;
-					$scope.$broadcast('serverAvailable');
-					$scope.pingStatus.b=0;
-				});
-			},
-			error: function(rt,et,ts) {
-				$scope.$apply(function() {
-					$scope.serverAvailable=false;
-					$scope.pingStatus.b=2;
-				});
-				////alert("Server"+ZBOOTA_SERVER_URL+" unavailable. "+et+";"+ts);
-			},
-			complete: function() { $scope.$apply(function() { $scope.pingStatus.a=1; }); }
-		});
+		$http.get(ZBOOTA_SERVER_URL+'/api/get.php', {timeout:5000}).
+			success( function(rt) {
+				$scope.serverAvailable=true;
+				$scope.$broadcast('serverAvailable');
+				$scope.pingStatus.b=0;
+				$scope.pingStatus.a=1;
+			}).
+			error( function(et) {
+				$scope.serverAvailable=false;
+				$scope.pingStatus.b=2;
+				$scope.pingStatus.a=1;
+				//alert("Server"+ZBOOTA_SERVER_URL+" unavailable. "+et+";");
+			})
+		;
 	};
 
 	angular.element(document).ready(function () {
@@ -174,7 +197,7 @@ function Controller1($scope) {
 
 	});
 
-	$scope.$on('requestAddCore', function(event,fn) { $scope.addCore(fn,true); });
+	$scope.$on('requestAddCore', function(event,fns) { for(var i in fns) $scope.addCore(fns[i],true); });
 
 	$scope.showAdd=function() { $('#addModal').modal('show'); };
 	$scope.hideAdd=function() { $('#addModal').modal('hide'); };
@@ -232,5 +255,6 @@ function Controller1($scope) {
 		id=an2id(a,n);
 		if(!$scope.photos.hasOwnProperty(id)) return false; else return $scope.photos[id];
 	};
+
 
 };

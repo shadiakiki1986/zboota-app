@@ -1,30 +1,6 @@
 function Controller4($scope) {
 
 
-	$scope.$parent.uploadPhotoStatus=false;
-	uploadPhoto=function(file) {
-		// http://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
-		var data = new FormData();
-		data.append('image_file', file);
-		$scope.$parent.uploadPhotoStatus=true;
-		$.ajax({
-			url: ZBOOTA_SERVER_URL+'/api/uploadPhoto.php',
-			type: 'POST',
-			data: data,
-			cache: false,
-			contentType: false,
-			processData: false,
-			success: function(text) {
-				$scope.$parent.addC.photoUrl=text;
-			},
-			error: function() { console.log("Error in upload"); },
-			complete: function() {
-				$scope.$apply(function() { $scope.$parent.uploadPhotoStatus=false; });
-			}
-		});
-	};
-
-
 	$scope.addPhoto=function() {
 	    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 	      alert('The File APIs are not fully supported in this browser.');
@@ -68,7 +44,6 @@ function Controller4($scope) {
 		}
 		filerdr.readAsDataURL(input.files[0]);
 
-		uploadPhoto(file);
 	      }
 	};
 
