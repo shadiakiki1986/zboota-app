@@ -115,7 +115,7 @@ function Controller1($scope, $http) {
 		// This also serves that the image was not showing up on my tablet
 		id=an2id(xxx.a,xxx.n);
 //console.log(id,xxx.photoUrl,myscope.data[id].photoUrl);
-		if(xxx.hasOwnProperty('photoUrl') && (myscope.data[id].photoUrl!=xxx.photoUrl || !myscope.photoshow1(xxx.a,xxx.n) || xxx.photoUrl.length>180000)) {
+		if(xxx.hasOwnProperty('photoUrl') && (!myscope.data.hasOwnProperty(id) || myscope.data[id].photoUrl!=xxx.photoUrl || !myscope.photoshow1(xxx.a,xxx.n) || xxx.photoUrl.length>180000)) {
 			console.log("Need to get photo "+xxx.photoUrl+" for "+id);
 
 			// http://stackoverflow.com/a/16566198
