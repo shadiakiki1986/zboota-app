@@ -20,6 +20,9 @@ function Controller4($scope) {
 	    else {
 	      file = input.files[0];
 
+/*
+	The type check doesn't work in android. I imagine the size check also doesn't. Skipping
+
 		//allow only valid image file types
 		switch(file.type)
 		{
@@ -36,7 +39,7 @@ function Controller4($scope) {
 		    alert("Too big Image file! Please reduce the size of your photo using an image editor.");
 		    return false
 		}
-
+*/
 		var filerdr = new FileReader();
 		filerdr.onload = function(e) {
 			$('#imgprvw').attr('src', e.target.result);
