@@ -26,7 +26,7 @@ function Controller4($scope) {
 		    case 'image/png': case 'image/gif': case 'image/jpeg': case 'image/pjpeg':
 			break;
 		    default:
-			alert("Unsupported image type. Please use png, gif, jpeg, or pjpeg");
+			alert("Unsupported image type "+file.type+". Please use png, gif, jpeg, or pjpeg");
 			return false
 		}
 
