@@ -1,6 +1,15 @@
 I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+=1.2.3=
+2015-05-18
+* get function made parallel
+** in UI showing each car's get status separately
+* erased the "clear" lines (already commented out)
+* addCore was overwriting the isf, pml, dm fields
+* upon login, emitting the "loggedIn" event
+** also, running get AFTER successful update IF needed
+
 =1.2.2=
 2015-05-15
 * loading uploaded photos for logged in users

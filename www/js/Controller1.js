@@ -6,25 +6,44 @@ function Controller1($scope, $http) {
 	$scope.getStatus="None";
 
 	$scope.dataTs=null;
-	$scope.get = function() {
+	dataTsAll=[];
+	getParN=0;
+	getParStatus={};
+	$scope.getParStatusFn=function(a,n) { return getParStatus[an2id(a,n)]; };
+	$scope.getPar = function() {
+		// wrapper around $scope.get to call it in parallel
 		if(!$scope.serverAvailable) return;
 		if(Object.keys($scope.data).length==0) return;
 
 		$scope.getStatus="Requesting";
+		dataTsAll=[];
+		getParN=0;
+		for(var x in $scope.data) {
+			get($scope.data[x],x);
+		}
+	}
+	$scope.$on('loggedIn', function(event) { $scope.getPar(); });
+	get = function(dk,k) {
+	// dk: entry from $scope.data to retrieve
+	//  k: key from $scope.data corresponding to dk
+		if(!$scope.serverAvailable) return;
+		if(Object.keys($scope.data).length==0) return;
+		getParStatus[k]=true;
+
 		$http({method:'POST',
 			url: ZBOOTA_SERVER_URL+'/api/get2.php',
-			data: {lpns:JSON.stringify($scope.data)},
+			data: {lpns:JSON.stringify([dk])},
 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			}).
 			success( function(rt) {
-//console.log(rt);
+				getParN+=1;
+
 				if(rt.hasOwnProperty("error")) {
 					alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
 					console.log("error, "+rt.error);
 					return;
 				}
 				if(Object.keys(rt).length>0) {
-					dataTsAll=[];
 					for(var i in rt) {
 						$scope.data[i].isf=rt[i].isf;
 						$scope.data[i].pml=rt[i].pml;
@@ -36,21 +55,24 @@ function Controller1($scope, $http) {
 						dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
 					}
 					$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
-					window.localStorage.setItem('data',angular.toJson($scope.data));
-					window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
+					// When all are retrieved, save to local storage
+					if(getParN==Object.keys($scope.data).length) {
+						window.localStorage.setItem('data',angular.toJson($scope.data));
+						window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
+					}
 				}
-				$scope.getStatus="None";
+				getParStatus[k]=false;
+				if(getParN==Object.keys($scope.data).length) $scope.getStatus="None";
 			}).
 			error( function(et) {
+				getParN+=1;
+
 				console.log("Error getting zboota from server. "+et);
-				$scope.getStatus="None";
+				getParStatus[k]=false;
+				if(getParN==Object.keys($scope.data).length) $scope.getStatus="None";
 				$scope.pingServer();
 			})
 		;
-	};
-
-	$scope.clear=function() {
-		for(d in $scope.data) { $scope.del($scope.data[d].a,$scope.data[d].n); }
 	};
 
 	$scope.dataHas=function(a,n) { return $scope.data.hasOwnProperty(an2id(a,n)); };
@@ -90,7 +112,7 @@ function Controller1($scope, $http) {
 
 	$scope.add=function() {
 		$scope.addCore($scope.addC,false);
-		$scope.get(); // to get info of newly added car or edited car
+		$scope.getPar(); // to get info of newly added car or edited car
 		$scope.addReset();
 		$scope.hideAdd();
 	};
@@ -158,7 +180,18 @@ function Controller1($scope, $http) {
 			}
 		}
 
-		myscope.data[id]=angular.fromJson(angular.toJson(xxx));
+		// Instead of myscope.data[id]=angular.fromJson(angular.toJson(xxx))
+		// which overwrites the isf, pml, and dm fields
+		// split them out field by field.
+		// Ideally, I would gather isf, pml, and dm under a field "meta",
+		// but I'm too lazy
+		temp=angular.fromJson(angular.toJson(xxx));
+		myscope.data[id].a=temp.a;
+		myscope.data[id].n=temp.n;
+		myscope.data[id].l=temp.l;
+		myscope.data[id].hp=temp.hp;
+		myscope.data[id].y=temp.y;
+		myscope.data[id].t=temp.t;
 
 		window.localStorage.setItem('data',angular.toJson(myscope.data));
 		window.localStorage.setItem('photos',angular.toJson(myscope.photos));

@@ -34,8 +34,9 @@ function Controller2($scope,$http) {
 					$scope.dataServer=angular.toJson(rt);
 
 				});
-				$scope.update(); // updating with whatever was done while offline
-				$scope.$parent.get(); // retrieving data after login
+				$scope.update(function() {
+					$scope.$emit("loggedIn"); //$scope.$parent.get(); // retrieving data after login
+				}); // updating with whatever was done while offline
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log("Error logging in. "+textStatus+","+errorThrown);
@@ -46,7 +47,9 @@ function Controller2($scope,$http) {
 	};
 
 	$scope.updateStatus='None';
-	$scope.update=function() {
+	$scope.update=function(sFn) {
+	// sFn: success callback function with no parameters
+
 		if($scope.loginInvalid()||!$scope.$parent.serverAvailable) return;
 
 		// check if any photos need to be uploaded
@@ -95,8 +98,13 @@ function Controller2($scope,$http) {
 //						alert("Error updating server. "+textStatus+","+errorThrown);
 						$scope.$parent.pingServer();
 					},
-					complete: function() { $scope.$apply(function() { $scope.updateStatus='None'; }); }
+					complete: function() { $scope.$apply(function() {
+						$scope.updateStatus='None';
+						sFn();
+					}); }
 				});
+			} else {
+				sFn();
 			}
 		} // end toUpload.length>0
 
