@@ -100,11 +100,11 @@ function Controller2($scope,$http) {
 					},
 					complete: function() { $scope.$apply(function() {
 						$scope.updateStatus='None';
-						sFn();
+						if(sFn) sFn();
 					}); }
 				});
 			} else {
-				sFn();
+				if(sFn) sFn();
 			}
 		} // end toUpload.length>0
 
