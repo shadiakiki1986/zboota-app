@@ -186,12 +186,16 @@ function Controller1($scope, $http) {
 		// Ideally, I would gather isf, pml, and dm under a field "meta",
 		// but I'm too lazy
 		temp=angular.fromJson(angular.toJson(xxx));
-		myscope.data[id].a=temp.a;
-		myscope.data[id].n=temp.n;
-		myscope.data[id].l=temp.l;
-		myscope.data[id].hp=temp.hp;
-		myscope.data[id].y=temp.y;
-		myscope.data[id].t=temp.t;
+		if(myscope.data.hasOwnProperty(id)) {
+			myscope.data[id].a=temp.a;
+			myscope.data[id].n=temp.n;
+			myscope.data[id].l=temp.l;
+			myscope.data[id].hp=temp.hp;
+			myscope.data[id].y=temp.y;
+			myscope.data[id].t=temp.t;
+		} else {
+			myscope.data[id]=temp;
+		}
 
 		window.localStorage.setItem('data',angular.toJson(myscope.data));
 		window.localStorage.setItem('photos',angular.toJson(myscope.photos));
