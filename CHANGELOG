@@ -2,6 +2,10 @@ I'm tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 =1.2.3=
+2015-05-20
+* struggled to get automated web gui testing
+* finally resolved it with selenium-webdriver + firefox + not headless
+
 2015-05-18
 * get function made parallel
 ** in UI showing each car's get status separately

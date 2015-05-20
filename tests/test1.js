@@ -1,42 +1,21 @@
-// https://github.com/admc/wd/blob/master/examples/async/firefox.js
-// with help from http://simpleprogrammer.com/2014/02/03/selenium-with-node-js/
-//
-// node test1.js
+// http://simpleprogrammer.com/2014/02/03/selenium-with-node-js/
 
-"use strict";
-require('colors');
-var wd=require("wd");
-var chai = require("chai");
-var should = chai.should();
+var webdriver = require('selenium-webdriver'),
+    By = require('selenium-webdriver').By,
+    until = require('selenium-webdriver').until;
+ 
+var driver = new webdriver.Builder().
+   forBrowser('firefox').
+   build();
 
-var browser = wd.remote();
+//var driver = new webdriver.Builder().
+//   withCapabilities(webdriver.Capabilities.chrome()).
+//   setChromeOptions({"binary_location": "/usr/bin/chromium-browser"}).
+//   build();
 
-// optional extra logging
-browser.on('status', function(info) {
-console.log(info.cyan);
-});
-browser.on('command', function(eventType, command, response) {
-console.log(' > ' + eventType.cyan, command, (response || '').grey);
-});
-browser.on('http', function(meth, path, data) {
-console.log(' > ' + meth.magenta, path, (data || '').grey);
-});
+driver.get('file:///home/shadi/Development/zboota-app/www/index.html');
+//driver.findElement(By.name('q')).sendKeys('simple programmer');
+//driver.findElement(By.name('btnG')).click();
+driver.wait(until.titleIs('webdriver - Google Search'), 10000);
+//driver.quit();
 
-
-browser.init({browserName:'firefox'}, function() {
-browser.get("http://admc.io/wd/test-pages/guinea-pig.html", function() {
-browser.title(function(err, title) {
-console.log(title,err);
-title.should.include('WD');
-browser.elementById('i am a link', function(err, el) {
-browser.clickElement(el, function() {
-/* jshint evil: true */
-browser.eval("window.location.href", function(err, href) {
-href.should.include('guinea-pig2');
-browser.quit();
-});
-});
-});
-});
-});
-});
