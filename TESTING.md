@@ -1,6 +1,8 @@
 I still perform the testing of the app manually.
 
-Here are the steps I follow
+Automated testing using appium is work-in-progress. Please check my notes on this at the bottom of this page
+
+Here are the steps I follow for my manual testing
 
 # Preparation
 * go to my aws console
@@ -91,3 +93,39 @@ Here are the steps I follow
  * expect login modal to disappear
  * expect the refresh button to be disabled
 * click on "+"
+
+# Automated testing
+Install node and npm
+* sudo apt-get install nodejs npm
+
+Configure npm such that we can run npm install -g FOO without sudo
+* http://stackoverflow.com/questions/18212175/npm-yeoman-install-generator-angular-without-sudo/18277225#18277225
+* http://stackoverflow.com/a/21712034
+* npm config set prefix '~/.npm' 
+ * after checking that ~/.npm exists
+* append to ~/.bash_profile
+ * export PATH="$PATH:$HOME/.npm/bin"
+ * not to ~/.bashrc because it doesn''t get loaded upon ssh
+
+## Testing on chrome
+```
+npm install selenium-webdriver
+wget http://chromedriver.storage.googleapis.com/2.15/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+sudo mv chromedriver /usr/local/bin
+sudo apt-get install google-chrome
+sudo apt-get install chromium-browser chromium-chromedriver
+sudo apt-get install xvfb # http://www.installationpage.com/selenium/how-to-run-selenium-headless-firefox-in-ubuntu/
+```
+
+## Appium
+Install appium
+* http://appium.io/
+```
+> npm install -g appium  # get appium (WITHOUT SUDO)
+> npm install wd         # get appium client
+npm install chai # https://www.npmjs.com/package/chai
+npm install chai-as-promised # https://www.npmjs.com/package/chai-as-promised
+
+> node your-appium-test.js
+```
