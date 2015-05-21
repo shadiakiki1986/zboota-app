@@ -1,4 +1,4 @@
-I'm tring to follow Semantic Versioning 2.0.0
+I''m tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 # 1.2.3
@@ -11,7 +11,7 @@ http://semver.org/
 
 2015-05-18
 * get function made parallel
- * in UI showing each car's get status separately
+ * in UI showing each car''s get status separately
 * erased the "clear" lines (already commented out)
 * addCore was overwriting the isf, pml, dm fields
 * upon login, emitting the "loggedIn" event
@@ -36,9 +36,9 @@ http://semver.org/
 * dropped unnecessary imgprvw.src from adding image
 * added redundant image upload/download when adding new image after displaying locally
  * even though this works on the browser
- * it doesn't on my tablet, so this is for that
+ * it doesn''t on my tablet, so this is for that
  * the same is done with the thumbnail in the main list
-  * in case it's the dataurl of the original, overwrite with dataurl from server
+  * in case it''s the dataurl of the original, overwrite with dataurl from server
 * addCore: reordering code a bit
 * editing image and/or removing an image was not really working..fixed
 
@@ -106,4 +106,4 @@ version bump for ios
 # V1.0
 2015-01-30
 * moving client out of zboota-server into separate repo and building app
-* I'm starting off with 1.0 since I had already progressed with the app in zboota-server repo
+* I''m starting off with 1.0 since I had already progressed with the app in zboota-server repo

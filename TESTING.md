@@ -46,7 +46,7 @@ Here are the steps I follow for my manual testing. The marks are what I have aut
 * [x] click "Add"
  * [x] expect car add module to disappear
  * [x] expect new car label to show up in list
- * [ ] expect new car area/number to show up in list
+ * [x] expect new car area/number to show up in list
 
 # Edit
 ## Change label
@@ -59,24 +59,25 @@ Here are the steps I follow for my manual testing. The marks are what I have aut
 * [x] change the label to something else
 * [x] click "Save"
  * [x] expect new label to show up in list
- * [ ] expect car number and area code to still be the same
+ * [x] expect car number and area code to still be the same
 
 ## Change number or area
-* [ ] click "Edit" button
- * [ ] expect car add module to show up already populated with the car''s info just added
- * [ ] expect "Del" button to be enabled
- * [ ] expect "Save" instead of "Add"
-* [ ] change the number and/or area to something else
-* [ ] click "Save"
- * [ ] expect entry to show up with correct number and area
+* [x] click "Edit" button
+ * [x] expect car add module to show up already populated with the car''s info just added
+ * [x] expect "Del" button to be enabled
+ * [x] expect "Save" instead of "Add"
+ * [x] expect "Save" button to be enabled
+* [x] change the number and/or area to something else
+* [x] click "Save"
+ * [x] expect entry to show up with old label
+ * [x] expect entry to show up with new number and area
+ * [x] expect no entry with old number and area
 
 # Working offline
 * [ ] Add, edit tests above should also work while offline
 
 # New user
-* [ ] go to my aws console
-* [ ] open dynamodb us-west-2
-* [ ] delete shadiakiki1986@hotmail.com from zboota-users table
+* [ ] delete shadi_akiki_1986@hotmail.com from zboota-users by using the deleteTestAccount.php api hook http://genesis.akikieng.com/zboota-server/api/deleteTestUser.php
 * [ ] click Existing user
 * [ ] enter shadiakiki1986@hotmail.com with any password
  * [ ] expect "email not registered" error message
