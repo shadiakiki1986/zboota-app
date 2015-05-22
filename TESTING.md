@@ -1,13 +1,9 @@
-I still perform the testing of the app manually.
+The testing of the app is covered by the steps below.
 
-Automated testing using selenium is work-in-progress. Install node, npm, ... as below
-```
-sudo apt-get install nodejs npm       # required ubuntu installations
-npm install selenium-webdriver should # required node packages
-node tests/test1.js                   # run tests
-```
+Automated testing using selenium is marked with a check.
 
-Here are the steps I follow for my manual testing. The marks are what I have automated thus far
+Please make sure to have followed the installation by ''make install''. Run these by ''make test'' 
+
 
 # Preparation
 ## Local storage
@@ -76,37 +72,71 @@ Here are the steps I follow for my manual testing. The marks are what I have aut
 # Working offline
 * [ ] Add, edit tests above should also work while offline
 
-# New user
-* [ ] delete shadi_akiki_1986@hotmail.com from zboota-users by using the deleteTestAccount.php api hook http://genesis.akikieng.com/zboota-server/api/deleteTestUser.php
-* [ ] click Existing user
-* [ ] enter shadiakiki1986@hotmail.com with any password
- * [ ] expect "email not registered" error message
-* [ ] click ok
-* [ ] close Existing user modal
-* [ ] click New user
-* [ ] enter "blablabla"
-* [ ] click Create
- * [ ] expect an alert saying "invalid email"
-* [ ] dismiss alert
-* [ ] enter shadiakiki1986@hotmail.com
-* [ ] click Create
- * [ ] expect an alert saying that the email has been sent
-* [ ] dismiss alert
-* [ ] click New user
-* [ ] enter shadiakiki1986@hotmail.com
-* [ ] click Create
- * [ ] expect an alert saying that the email is already registered
-* [ ] dismiss alert
-* [ ] go to my hotmail inbox
- * [ ] expect a new registration email
-* [ ] copy the password from the registration email
-* [ ] go back to www/index.html
-* [ ] click Existing user
- * [ ] expect my email is still there
-* [ ] enter my password
-* [ ] click login
- * [ ] expect login modal to disappear
- * [ ] expect the refresh button to be disabled
-* [ ] click on "+"
+# Registered user
+## Log in for inexistant
+* [x] click Existing user
+ * [x] expect loginModal to show up
+ * [x] expect login button to be disabled
+ * [x] expect forgot password button to be disabled
+ * [x] expect no button "create" to be shown
+* [x] enter whatever
+ * [x] expect forgot password button to get enabled
+ * [x] expect login button to still be disabled
+* [x] enter any password
+ * [x] expect login button to get enabled
+* [x] click on login
+ * [x] expect "email not registered" error message
+* [x] dismiss alert by clicking ok
+ * [x] expect loginModal to be hidden now
 
+## New invalid
+* [x] click New user
+ * [x] expect loginModal to show
+* [x] enter "blablabla"
+* [x] click Create
+ * [x] expect an alert saying "invalid email"
+* [x] dismiss alert
+ * [x] expect loginModal to be hidden now
+
+## New valid
+### start
+* [x] delete shadi_akiki_1986@hotmail.com from zboota-users
+ * by using the deleteTestAccount.php api hook
+ * http://genesis.akikieng.com/zboota-server/api/deleteTestUser.php
+* [x] enter shadi_akiki_1986@hotmail.com
+* [x] click Create
+ * [x] expect an alert saying that the email has been sent
+* [x] dismiss alert
+
+### already registered
+* [x] click New user
+ * [x] expect shadi_akiki_1986@hotmail.com to still be filled in
+* [x] click Create
+ * [x] expect an alert saying that the email is already registered
+* [x] dismiss alert
+
+### Login for new
+* [x] copy the password from the registration email
+* [x] click Existing user
+ * [x] expect my username is still there
+* [x] enter my password
+* [x] click login
+ * [x] expect login modal to disappear
+ * [x] expect the refresh button to be disabled
+ * [x] expect log out button to be shown and enabled
+ * [x] epect existing user and new user buttons to be hidden
+
+# add while logged in
+* [x] click on "+"
+* [x] enter random car info without mechanique without photo
+* [x] click on "Save"
+* [x] clear localstorage
+* [x] refresh
+* [x] click on existing
+* [x] enter shadi_akiki_1986@hotmail.com and password
+* [x] click on login
+ * [x] expect car to show up
+* [x] refresh
+ * [x] expect to be automatically logged in
+ * [x] expect car to show up
 

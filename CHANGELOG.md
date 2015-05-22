@@ -2,6 +2,11 @@ I''m tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 # 1.2.3
+2015-05-22
+* More complete automated testing
+* makefile
+* re-ordering files
+
 2015-05-21
 * first draft of automated testing .. hooray!
 

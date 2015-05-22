@@ -1,6 +1,0 @@
-* document api in zboota-server
-* make zboota-server public repo
-* remember git push origin --tags
-* fields "a", "n", "l" to be gathered under "meta" field
-** fields "isf", "pml", "dm" to be gathered under "zboota" field
-** also needs to be applied on server

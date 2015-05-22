@@ -1,4 +1,7 @@
 #!/bin/bash
+# This script will require a key to sign the app
+# To generate key for this app for google play
+# keytool -v -genkey -v -keystore zboota-app.keystore -alias \"zboota-app\" -keyalg RSA -validity 10000
 
 set -e
 

@@ -35,7 +35,7 @@
 		<div class="row">
 			<div class="text-muted pull-left"><img src="img/logo-57.png" /><!-- Zboota--></div>
 			<div class="btn-group pull-right" role="group"><!-- ng-show="serverAvailable">-->
-				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small">Log out</button>
+				<button ng-click="logout();" ng-show="loginStatus=='Logged in'" class="btn btn-small" id="logoutBtn">Log out</button>
 				<button ng-click="showLogin();" ng-disabled="loginStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small" id="existingUserBtn">Existing user</button>
 				<button ng-click="showNew();" ng-disabled="newUStatus!='None'||loginStatus!='None'||getStatus!='None'||!serverAvailable" ng-show="loginStatus!='Logged in'" class="btn btn-small" id="newUserBtn">New user</button>
 			</div>
@@ -55,17 +55,17 @@
 		      <div class="modal-content">
 
 			<div class="modal-header">
-       				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+       				<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="loginCloseBtn"><span aria-hidden="true">&times;</span></button>
 				Enter your email <span ng-show="loginType!='New'"> and password</span>
 			</div>
 			<div class="modal-body">
-				<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'" class="form-control"/> <br>
-				<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'&&loginType=='Log in'" class="form-control" /> <br>
+				<input ng-model="loginU.email" type="text" size=5 placeholder="Email" ng-show="loginStatus!='Logged in'" ng-disabled="loginStatus=='Logged in'" class="form-control" id="loginU_email"/> <br>
+				<input ng-model="loginU.pass" type="password" size=5 placeholder="Password" ng-show="loginStatus!='Logged in'&&loginType=='Log in'" class="form-control" id="loginU_pass" /> <br>
 			</div>
 			<div class="modal-footer">
-				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginInvalid()" class="btn btn-primary">Log in</button> &nbsp;
-				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-warning">Forgot password</button> &nbsp;
-				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email" class="btn btn-primary">Create</button> &nbsp;
+				<button ng-click="login();" ng-show="loginType=='Log in'" ng-disabled="loginInvalid()" class="btn btn-primary" id="loginBtn">Log in</button> &nbsp;
+				<button ng-click="forgotPassword();" ng-show="loginType=='Log in'" ng-disabled="loginStatus!='None'||getStatus!='None'||!loginU.email||forgotPasswordStatus" class="btn btn-warning" id="forgotBtn">Forgot password</button> &nbsp;
+				<button ng-click="newU();" ng-show="loginType=='New'" ng-disabled="newUStatus!='None'||!loginU.email" class="btn btn-primary" id="createBtn">Create</button> &nbsp;
 			</div>
 		</div>
 		</div>
@@ -78,7 +78,7 @@
 	<tr ng-show="!noData()">
 		<th colspan=2 class="text-center">Zboota</th>
 		<th>
-			<button ng-click="getPar()" ng-disabled="(getStatus!='None' || !serverAvailable)" class="btn btn-success btn-small"><span class="glyphicon glyphicon-refresh"></span></button>
+			<button ng-click="getPar()" ng-disabled="(getStatus!='None' || !serverAvailable)" class="btn btn-success btn-small" id="refreshBtn"><span class="glyphicon glyphicon-refresh"></span></button>
 		</th>
 	</tr>
 	<tbody ng-repeat="rd in data">
