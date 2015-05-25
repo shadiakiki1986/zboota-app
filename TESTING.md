@@ -140,3 +140,10 @@ Please make sure to have followed the installation by ''make install''. Run thes
  * [x] expect to be automatically logged in
  * [x] expect car to show up
 
+# add mechanique
+* [x] same as ''add while logged in'' but with mechanique info
+ * [x] expect message about mechanique to show up
+
+# add photo
+* [x] same as ''add mechanique'' but with photo
+ * [x] expect photo to show up in cars list
