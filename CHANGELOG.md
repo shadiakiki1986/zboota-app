@@ -1,6 +1,12 @@
 I''m tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+# 1.2.4
+2015-06-02
+* version bump
+* taking care of case of invalid number added
+ * server returns error + app displays error in header + input new car doesn''t add unless is numeric
+
 # 1.2.3
 2015-05-22
 * More complete automated testing

@@ -23,6 +23,8 @@ function Controller1($scope, $http) {
 		}
 	}
 	$scope.$on('loggedIn', function(event) { $scope.getPar(); });
+	$scope.getError={};
+	$scope.getErrorAny=function() { return Object.keys($scope.getError).length>0; };
 	get = function(dk,k) {
 	// dk: entry from $scope.data to retrieve
 	//  k: key from $scope.data corresponding to dk
@@ -39,26 +41,28 @@ function Controller1($scope, $http) {
 				getParN+=1;
 
 				if(rt.hasOwnProperty("error")) {
-					alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
-					console.log("error, "+rt.error);
-					return;
-				}
-				if(Object.keys(rt).length>0) {
-					for(var i in rt) {
-						$scope.data[i].isf=rt[i].isf;
-						$scope.data[i].pml=rt[i].pml;
-						if(rt[i].dm) {
-							$scope.data[i].dm=rt[i].dm;
-						} else {
-							if($scope.data[i].hasOwnProperty("dm") && $scope.data[i].dm!="") delete $scope.data[i].dm;
+					//alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
+					//console.log("error, "+rt.error);
+					$scope.getError[k]=rt.error;
+				} else {
+					delete $scope.getError[k];
+					if(Object.keys(rt).length>0) {
+						for(var i in rt) {
+							$scope.data[i].isf=rt[i].isf;
+							$scope.data[i].pml=rt[i].pml;
+							if(rt[i].dm) {
+								$scope.data[i].dm=rt[i].dm;
+							} else {
+								if($scope.data[i].hasOwnProperty("dm") && $scope.data[i].dm!="") delete $scope.data[i].dm;
+							}
+							dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
 						}
-						dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
-					}
-					$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
-					// When all are retrieved, save to local storage
-					if(getParN==Object.keys($scope.data).length) {
-						window.localStorage.setItem('data',angular.toJson($scope.data));
-						window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
+						$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
+						// When all are retrieved, save to local storage
+						if(getParN==Object.keys($scope.data).length) {
+							window.localStorage.setItem('data',angular.toJson($scope.data));
+							window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
+						}
 					}
 				}
 				getParStatus[k]=false;
@@ -77,8 +81,9 @@ function Controller1($scope, $http) {
 
 	$scope.dataHas=function(a,n) { return $scope.data.hasOwnProperty(an2id(a,n)); };
 	$scope.del=function(a,n) {
-		delete $scope.data[an2id(a,n)];
-		delete $scope.photos[an2id(a,n)];
+		id=an2id(a,n);
+		delete $scope.data[id];
+		delete $scope.photos[id];
 		window.localStorage.setItem('data',angular.toJson($scope.data));
 		window.localStorage.setItem('photos',angular.toJson($scope.photos));
 		$scope.$broadcast('requestUpdate');
@@ -86,6 +91,7 @@ function Controller1($scope, $http) {
 			$scope.dataTs=null;
 			window.localStorage.removeItem('dataTs');
 		}
+		delete $scope.getError[id];
 	};
 	$scope.momentFormat1=function(a) { return moment(a).format('MMMM Do YYYY, h:mm:ss a'); };
 	$scope.momentFormat2=function(a) { return moment(a).format('YYYY-MM-DD'); };
@@ -249,6 +255,17 @@ function Controller1($scope, $http) {
 		});
 		setInterval(function() { $scope.$apply(function() { $scope.tnow=new Date();}); }, 60000);
 
+		$("#addC_n_error").hide();
+		$('#addC_n').change(function() {
+			if(!$.isNumeric($("#addC_n").val())) {
+				$("#addC_n").parent().addClass("has-error");
+				$("#addC_n_error").show();
+			} else {
+				$("#addC_n").parent().removeClass("has-error");
+				$("#addC_n_error").hide();
+			}
+		});
+
 	});
 
 	$scope.$on('requestAddCore', function(event,fns) { for(var i in fns) $scope.addCore(fns[i],true); });
@@ -283,7 +300,7 @@ function Controller1($scope, $http) {
 	$scope.addCisInvalid=function() {
 		var addC=$scope.addC;
 		if(addC) {
-			return !addC.a||!addC.n||!addC.l||!((!addC.y&&!addC.hp&&!addC.t)||(addC.y&&addC.hp&&addC.t));
+			return !addC.a||!addC.n||!addC.l||!((!addC.y&&!addC.hp&&!addC.t)||(addC.y&&addC.hp&&addC.t))||!$.isNumeric(addC.n);
 		} else {
 			return true;
 		}
