@@ -19,15 +19,21 @@ function Controller1($scope, $http) {
 		dataTsAll=[];
 		getParN=0;
 		for(var x in $scope.data) {
-			get($scope.data[x],x);
+			getLambda($scope.data[x],x); // getLambda
 		}
 	}
 	$scope.$on('loggedIn', function(event) { $scope.getPar(); });
 	$scope.getError={};
 	$scope.getErrorAny=function() { return Object.keys($scope.getError).length>0; };
-	get = function(dk,k) {
+
+	get=function(dk,k) {
+		if(true) getNonLambda(dk,k); else getLambda(dk,k);
+	};
+
+	getNonLambda = function(dk,k) {
 	// dk: entry from $scope.data to retrieve
 	//  k: key from $scope.data corresponding to dk
+	// Note: Also check getLambda function below
 		if(!$scope.serverAvailable) return;
 		if(Object.keys($scope.data).length==0) return;
 		getParStatus[k]=true;
@@ -37,37 +43,7 @@ function Controller1($scope, $http) {
 			data: {lpns:JSON.stringify([dk])},
 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			}).
-			success( function(rt) {
-				getParN+=1;
-
-				if(rt.hasOwnProperty("error")) {
-					//alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
-					//console.log("error, "+rt.error);
-					$scope.getError[k]=rt.error;
-				} else {
-					delete $scope.getError[k];
-					if(Object.keys(rt).length>0) {
-						for(var i in rt) {
-							$scope.data[i].isf=rt[i].isf;
-							$scope.data[i].pml=rt[i].pml;
-							if(rt[i].dm) {
-								$scope.data[i].dm=rt[i].dm;
-							} else {
-								if($scope.data[i].hasOwnProperty("dm") && $scope.data[i].dm!="") delete $scope.data[i].dm;
-							}
-							dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
-						}
-						$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
-						// When all are retrieved, save to local storage
-						if(getParN==Object.keys($scope.data).length) {
-							window.localStorage.setItem('data',angular.toJson($scope.data));
-							window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
-						}
-					}
-				}
-				getParStatus[k]=false;
-				if(getParN==Object.keys($scope.data).length) $scope.getStatus="None";
-			}).
+			success( function(rt) { $scope.getCore(rt,k); } ).
 			error( function(et) {
 				getParN+=1;
 
@@ -77,6 +53,41 @@ function Controller1($scope, $http) {
 				$scope.pingServer();
 			})
 		;
+	};
+
+	$scope.getCore = function(rt,k) {
+	// rt: return value from my api on success
+
+		console.log("got data",rt);
+		getParN+=1;
+
+		if(rt.hasOwnProperty("error")) {
+			//alert("We're having trouble getting your car's zboota from the servers. Please try again later.");
+			//console.log("error, "+rt.error);
+			$scope.getError[k]=rt.error;
+		} else {
+			delete $scope.getError[k];
+			if(Object.keys(rt).length>0) {
+				for(var i in rt) {
+					$scope.data[i].isf=rt[i].isf;
+					$scope.data[i].pml=rt[i].pml;
+					if(rt[i].dm) {
+						$scope.data[i].dm=rt[i].dm;
+					} else {
+						if($scope.data[i].hasOwnProperty("dm") && $scope.data[i].dm!="") delete $scope.data[i].dm;
+					}
+					dataTsAll.push(moment(rt[i].dataTs,'YYYY-MM-DD h:mm:ss').format('YYYY-MM-DD'));
+				}
+				$scope.dataTs=new Date(dataTsAll.unique().sort()[0]);//new Date();
+				// When all are retrieved, save to local storage
+				if(getParN==Object.keys($scope.data).length) {
+					window.localStorage.setItem('data',angular.toJson($scope.data));
+					window.localStorage.setItem('dataTs',angular.toJson($scope.dataTs));
+				}
+			}
+		}
+		getParStatus[k]=false;
+		if(getParN==Object.keys($scope.data).length) $scope.getStatus="None";
 	};
 
 	$scope.dataHas=function(a,n) { return $scope.data.hasOwnProperty(an2id(a,n)); };
@@ -327,5 +338,43 @@ function Controller1($scope, $http) {
 		if(!$scope.photos.hasOwnProperty(id)) return false; else return $scope.photos[id];
 	};
 
+	getLambda = function(dk,k) {
+	// same as get function, but using AWS Lambda
+	// dk: entry from $scope.data to retrieve
+	//  k: key from $scope.data corresponding to dk
+		if(!$scope.serverAvailable) return;
+		if(Object.keys($scope.data).length==0) return;
+		getParStatus[k]=true;
+
+		// zboota-app IAM user
+		var lambda = new AWS.Lambda({
+		    'accessKeyId' : "AKIAIQIV7H3P3LUJIRKA",
+		    'secretAccessKey'  : "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",
+		    'region'  : "us-west-2"
+		});
+
+		// http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#invoke-property
+		var params = {
+		  FunctionName: 'zboota-get', /* required */
+		  Payload: angular.toJson([dk])
+		};
+		lambda.invoke(params, function(err, data) {
+		  if (err||data.StatusCode!=200) {
+			console.log("Error getting zboota from server.");
+			console.log(err, err.stack); // an error occurred
+			getParN+=1;
+
+			getParStatus[k]=false;
+			if(getParN==Object.keys($scope.data).length) $scope.getStatus="None";
+			$scope.pingServer();
+		  } else {
+			rt=angular.fromJson(data.Payload);
+			//console.log("Success in getting zboota from server");
+			//console.log(rt);           // successful response
+			$scope.$apply(function() { $scope.getCore(rt,k); });
+		  }
+		});
+
+	};
 
 };

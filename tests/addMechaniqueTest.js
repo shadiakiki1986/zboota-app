@@ -20,6 +20,7 @@ hf.noCars(driver,By);
 hf.login(driver,By);
 driver.sleep(3000);
 hf.addCarWithMechanique(driver,By,webdriver);
+driver.sleep(3000);
 hf.carWithMechaniqueAdded(driver,By);
 
 driver.sleep(1000);
