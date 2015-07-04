@@ -33,11 +33,4 @@
     	<icon src="www/img/logo-76.png" width="76" height="76" />
     </platform>
 
-    <platform name="blackberry10">
-    	<access uri="http://genesis.akikieng.com" subdomains="true">
-    	  <feature id="blackberry.app" version="1.0.0.0" required="true"/>
-    	  <feature id="blackberry.invoke" version="1.0.0.0" required="true"/>
-    	</access>
-    </platform>
-
 </widget>

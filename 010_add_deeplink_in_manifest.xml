@@ -9,5 +9,5 @@
 	<action android:name="android.intent.action.VIEW" />
 	<category android:name="android.intent.category.DEFAULT" />
 	<category android:name="android.intent.category.BROWSABLE" />
-	<data android:host="genesis.akikieng.com" android:path="/zboota-server/client" android:scheme="http" />
+	<data android:host="shadiakiki1986.github.io" android:path="/zboota-server/client" android:scheme="http" />
     </intent-filter>

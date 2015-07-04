@@ -18,7 +18,7 @@ What sets this one apart is:
 * It's on
  * [Google Play](https://play.google.com/store/apps/details?id=com.akikieng.genesis.zbootaapp)
  * [Apple Store](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=974745846&mt=8)
-* You can use it in your [browser](http://genesis.akikieng.com/zboota-server/client)
+* You can use it in your [browser](http://shadiakiki1986.github.io/zboota-server/client/)
 * The app has a [facebook page](http://www.facebook.com/yaza4) 
 
 # Misc
