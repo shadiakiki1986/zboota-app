@@ -8,6 +8,7 @@ http://semver.org/
  * with option to switch back
 * down arrow not showing for cars without images
 * using aws cognito instead of fixed user
+* dropped anything having to do with the photo
 
 2015-06-02
 * version bump
