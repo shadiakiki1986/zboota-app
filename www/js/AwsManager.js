@@ -42,7 +42,7 @@ AwsManager.prototype.invokeLambda = function(lfn,lp,cbFn) {
     this.ncheck++;
     //console.log("Already connecting, re-attempt", this.ncheck);
     if(this.ncheck<5) {
-      setTimeout(function() { self.invokeLambda(lfn,lp,cbFn); },5000);
+      setTimeout(function() { self.invokeLambda(lfn,lp,cbFn); },1000);
     } else {
       console.log("Aborting waiting for aws cognito connect");
     }
