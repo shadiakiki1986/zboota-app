@@ -1,7 +1,7 @@
 function Controller1($scope, $http) {
 
   $scope.data={};
-
+  $scope.awsMan = null;
   $scope.getStatus="None";
 
   $scope.dataTs=null;
@@ -246,6 +246,15 @@ function Controller1($scope, $http) {
       }
     });
 
+    // cognito role
+    // Initialize the Amazon Cognito credentials provider
+    AWS.config.region = 'us-east-1'; // Region
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
+    });
+    $scope.awsMan = new AwsManager();
+    $scope.awsMan.connect();
+
   });
 
   $scope.$on('requestAddCore', function(event,fns) { for(var i in fns) $scope.addCore(fns[i],true); });
@@ -305,56 +314,19 @@ function Controller1($scope, $http) {
   // dk: entry from $scope.data to retrieve
   //  k: key from $scope.data corresponding to dk
 
-
-    // cognito role
-    // Initialize the Amazon Cognito credentials provider
-    AWS.config.region = 'us-east-1'; // Region
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
-    });
-
-    // Make the call to obtain credentials
-    AWS.config.credentials.get(function(err){
-      if (err) {
-        console.log("Error: "+err);
-        return;
-      }
-
-      //     console.log("Cognito Identity Id: " + AWS.config.credentials.identityId);
-      // Credentials will be available when this function is called.
-      var accessKeyId = AWS.config.credentials.accessKeyId;
-      var secretAccessKey = AWS.config.credentials.secretAccessKey;
-      var sessionToken = AWS.config.credentials.sessionToken;
-
-      // zboota-app IAM user
-      var lambda = new AWS.Lambda({
-          'accessKeyId' : accessKeyId,
-          'secretAccessKey'  : secretAccessKey,
-          'sessionToken' : sessionToken,
-          'region'  : "us-west-2"
-      });
-
       // convert dk to non-associative array
       dk2=Object.keys(dk).map(function(x) { return dk[x]; });
 
-      // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#invoke-property
-      var params = {
-        FunctionName: 'zboota-get', /* required */
-        Payload: JSON.stringify(dk2)
-      };
-      lambda.invoke(params, function(err, data) {
+      $scope.awsMan.invokeLambda('zboota-get',dk2,function(err, data) {
         if (err||data.StatusCode!=200) {
-        $scope.getCoreError(err,dk);
+          $scope.getCoreError(err,dk);
         } else {
-        rt=angular.fromJson(data.Payload);
-        //console.log("Lambda Success in getting zboota from server");
-        //console.log(rt);           // successful response
-        $scope.$apply(function() { $scope.getCore(rt,Object.keys(dk)); });
+          rt=angular.fromJson(data.Payload);
+          //console.log("Lambda Success in getting zboota from server");
+          //console.log(rt);           // successful response
+          $scope.$apply(function() { $scope.getCore(rt,Object.keys(dk)); });
         }
       });
-
-    });
-
 
   };
 

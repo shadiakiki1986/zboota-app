@@ -2,6 +2,9 @@ I''m tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
 # 1.2.4
+2015-07-06
+* added aws lambda login
+
 2015-07-03
 * added aws lambda retrieval
 * parallel retrieval back to serial retrieval to save on aws lambda cycles

@@ -9,21 +9,13 @@ function Controller2($scope,$http) {
   $scope.loginInvalid=function(excludePass) {
     return ($scope.loginStatus!='None'&&$scope.loginStatus!='Logged in')||$scope.getStatus!='None'||!$scope.loginU.email||!(excludePass||$scope.loginU.pass);
   };
+
   $scope.login=function() {
     if($scope.loginInvalid()||!$scope.$parent.serverAvailable) return;
+    if(false) $scope.loginNonLambda(); else $scope.loginLambda();
+  }
 
-    $scope.loginStatus='Logging in';
-    $.ajax({type:'POST',
-      url: ZBOOTA_SERVER_URL+'/api/login.php',
-      data: $scope.loginU,
-      dataType: 'json',
-      success: function(rt) {
-        $scope.hideLogin();
-        if(rt.hasOwnProperty("error")) {
-          alert("Zboota login error: "+rt.error);
-          $scope.$apply(function() { $scope.loginStatus='None'; });
-          return;
-        }
+  loginCore = function(rt) {
         $scope.$apply(function() {
           $scope.loginStatus='Logged in';
           // append data from server to here
@@ -37,13 +29,48 @@ function Controller2($scope,$http) {
         $scope.update(function() {
           $scope.$emit("loggedIn"); //$scope.$parent.get(); // retrieving data after login
         }); // updating with whatever was done while offline
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.log("Error logging in. "+textStatus+","+errorThrown);
+  };
+
+  loginCoreError = function(msg) {
+        console.log(msg);
         $scope.$apply(function() { $scope.loginStatus='None'; });
         $scope.$parent.pingServer();
+  };
+
+  $scope.loginNonLambda=function() {
+    $scope.loginStatus='Logging in';
+    $.ajax({type:'POST',
+      url: ZBOOTA_SERVER_URL+'/api/login.php',
+      data: $scope.loginU,
+      dataType: 'json',
+      success: function(rt) {
+        $scope.hideLogin();
+        if(rt.hasOwnProperty("error")) {
+          loginCoreError("Zboota login error: "+rt.error);
+          return;
+        }
+        loginCore(rt);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        loginCoreError("Error logging in. "+textStatus+","+errorThrown);
       }
     });
+  };
+
+  $scope.loginLambda = function() {
+    $scope.$parent.awsMan.invokeLambda(
+      "zboota-login",
+      $scope.loginU,
+      function(err,data) {
+        $scope.hideLogin();
+        if (err||data.StatusCode!=200) {
+          loginCoreError(err);
+        } else {
+          rt=angular.fromJson(angular.fromJson(data.Payload));
+          loginCore(rt);
+        }
+    });
+
   };
 
   $scope.updateStatus='None';
