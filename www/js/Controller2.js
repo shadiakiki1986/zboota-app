@@ -32,9 +32,9 @@ function Controller2($scope,$http) {
   };
 
   loginCoreError = function(msg) {
-        console.log(msg);
+        alert("Zboota login error: "+msg);
         $scope.$apply(function() { $scope.loginStatus='None'; });
-        $scope.$parent.pingServer();
+        //$scope.$parent.pingServer();
   };
 
   $scope.loginNonLambda=function() {
@@ -46,7 +46,7 @@ function Controller2($scope,$http) {
       success: function(rt) {
         $scope.hideLogin();
         if(rt.hasOwnProperty("error")) {
-          loginCoreError("Zboota login error: "+rt.error);
+          loginCoreError(rt.error);
           return;
         }
         loginCore(rt);
@@ -65,10 +65,15 @@ function Controller2($scope,$http) {
         $scope.hideLogin();
         if (err||data.StatusCode!=200) {
           loginCoreError(err);
-        } else {
-          rt=angular.fromJson(angular.fromJson(data.Payload));
-          loginCore(rt);
+          return;
         }
+        rt=angular.fromJson(data.Payload);
+        if(rt.hasOwnProperty("errorMessage")) {
+          loginCoreError(rt.errorMessage);
+          return;
+        }
+        rt=angular.fromJson(rt);
+        loginCore(rt);
     });
 
   };
