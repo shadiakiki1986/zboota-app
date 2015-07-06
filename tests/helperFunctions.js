@@ -182,55 +182,5 @@ module.exports = {
 		driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[2]/td[1]/small"))
 			.getText()
 			.then(function(x) { x.should.equal("Mechanique: There are no results matching the specifications you\'ve entered..."); });
-	},
-	addCarWithPhoto:function(driver,By,webdriver) {
-		driver.findElement(By.id('addShowBtn')).click();
-		driver.sleep(500);
-
-		addC_a=driver.findElement(By.id('addC_a'));
-		addC_a.click();
-		addC_a.sendKeys(webdriver.Key.DOWN);
-		addC_a.sendKeys(webdriver.Key.ENTER);
-
-		driver.findElement(By.id('addC_n')).sendKeys('123');
-		driver.findElement(By.id('addC_l')).sendKeys('test');
-
-		addC_hp=driver.findElement(By.id('addC_hp'));
-		addC_hp.click();
-		addC_hp.sendKeys(webdriver.Key.DOWN);
-		addC_hp.sendKeys(webdriver.Key.DOWN);
-		addC_hp.sendKeys(webdriver.Key.ENTER);
-
-		addC_y=driver.findElement(By.id('addC_y'));
-		addC_y.click();
-		addC_y.sendKeys(webdriver.Key.DOWN);
-		addC_y.sendKeys(webdriver.Key.DOWN);
-		addC_y.sendKeys(webdriver.Key.ENTER);
-
-		addC_t=driver.findElement(By.id('addC_t'));
-		addC_t.click();
-		addC_t.sendKeys(webdriver.Key.DOWN);
-		addC_t.sendKeys(webdriver.Key.DOWN);
-		addC_t.sendKeys(webdriver.Key.ENTER);
-
-		image1=driver.findElement(By.id('image1'));
-		image1.sendKeys("/home/shadi/Development/zboota-app/www/img/logo-57.png");
-		driver.sleep(5000);
-
-		driver.findElement(By.id('addSaveBtn')).click();
-	},
-	carWithPhotoAdded:function(driver,By) {
-		// with photo
-		driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[1]/td[1]/img"))
-			.getAttribute("src")
-			.then(function(x) { x.should.be.ok; });
-		driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[1]/td[2]/div/div[1]/div[1]"))
-			.getInnerHtml()
-			.then(function(x) { x.should.equal("test"); });
-		driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[2]/td[1]/small"))
-			.getText()
-			.then(function(x) { x.should.equal("Mechanique: There are no results matching the specifications you\'ve entered..."); });
-
 	}
-
 };

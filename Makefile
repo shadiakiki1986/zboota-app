@@ -5,7 +5,6 @@ test:
 	node tests/newValidUserTest.js
 	node tests/addLoggedInTest.js
 	node tests/addMechaniqueTest.js
-	node tests/addPhotoTest.js
 
 androidPrepare:
 	cordova platform add android
