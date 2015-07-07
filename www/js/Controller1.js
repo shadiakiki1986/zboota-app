@@ -82,7 +82,7 @@ function Controller1($scope, $http) {
   // rt: return value from my api on success
   // ks: array of keys of originally passed associative array
 
-    //console.log("got data",rt);
+    console.log("got data",rt);
     getParN+=ks.length;
 
     if(rt.hasOwnProperty("error")) {
