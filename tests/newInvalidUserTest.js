@@ -19,7 +19,7 @@ driver.sleep(2000);
 hf.newUser(driver,By,"blabla");
 driver.sleep(1000);
 
-driver.switchTo().alert().getText().then(function(x) { x.should.equal("Zboota new account error: Invalid email blabla."); });
+driver.switchTo().alert().getText().then(function(x) { x.should.equal("Zboota new account error: Invalid email blabla"); });
 driver.switchTo().alert().dismiss();
 //driver.findElement(By.id("loginCloseBtn")).click();
 hf.elementHidden(driver,By,"loginModal");
