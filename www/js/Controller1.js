@@ -210,6 +210,7 @@ function Controller1($scope, $http) {
     } else {
       $scope.awsMan.connect(function() {
         $scope.awsMan.invokeLambda("zboota-get",[{"n":"123","a":"B"}],function(err,data) {
+          console.log("lambda invoke conclusion",err,data);
           if(err) pingError(err.message); else pingSuccess(data);
         });
       },pingError);

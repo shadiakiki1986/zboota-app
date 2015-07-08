@@ -28,7 +28,7 @@ var LoginManager = function($scope) {
   this.error = function(msg) {
         alert("Zboota login error: "+msg);
         $scope.$apply(function() { $scope.loginStatus='None'; });
-        $scope.$parent.pingServer();
+//        $scope.$parent.pingServer();
   };
 
   this.loginNonLambda=function() {
@@ -59,11 +59,18 @@ var LoginManager = function($scope) {
           return;
         }
         rt=angular.fromJson(data.Payload);
+
         if(rt.hasOwnProperty("errorMessage")) {
           rt = { error: rt.errorMessage };
-        } else {
-          rt=angular.fromJson(rt);
         }
+
+        if(rt.hasOwnProperty("error")) {
+          self.error(rt.error);
+          self.complete();
+          return;
+        }
+
+        rt=angular.fromJson(rt);
         self.success(rt);
         self.complete();
     });

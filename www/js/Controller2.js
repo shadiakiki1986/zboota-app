@@ -12,6 +12,7 @@ function Controller2($scope,$http) {
   $scope.loginStatus='None';
   lm = new LoginManager($scope);
   $scope.login=function() {
+    console.log("login");
     if($scope.loginInvalid()||!$scope.$parent.serverAvailable) return;
     $scope.loginStatus='Logging in';
     if(!USE_AWS_LAMBDA) lm.loginNonLambda(); else lm.loginLambda();
