@@ -1,8 +1,8 @@
 var LoginManager = function($scope) {
 
-  this.loginCore = function(rt) {
+  this.success = function(rt) {
         if(rt.hasOwnProperty("error")) {
-          this.loginCoreError(rt.error);
+          this.error(rt.error);
           return;
         }
 
@@ -21,11 +21,11 @@ var LoginManager = function($scope) {
         });
   };
 
-  this.loginCoreComplete = function() {
+  this.complete = function() {
         $scope.hideLogin();
   };
 
-  this.loginCoreError = function(msg) {
+  this.error = function(msg) {
         alert("Zboota login error: "+msg);
         $scope.$apply(function() { $scope.loginStatus='None'; });
         //$scope.$parent.pingServer();
@@ -38,12 +38,12 @@ var LoginManager = function($scope) {
       data: $scope.loginU,
       dataType: 'json',
       success: function(rt) {
-        self.loginCore(rt);
+        self.success(rt);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        self.loginCoreError(textStatus+","+errorThrown);
+        self.error(textStatus+","+errorThrown);
       },
-      complete: function() { self.loginCoreComplete(); }
+      complete: function() { self.complete(); }
     });
   };
 
@@ -54,8 +54,8 @@ var LoginManager = function($scope) {
       $scope.loginU,
       function(err,data) {
         if (err||data.StatusCode!=200) {
-          self.loginCoreError(err);
-          self.loginCoreComplete();
+          self.error(err);
+          self.complete();
           return;
         }
         rt=angular.fromJson(data.Payload);
@@ -64,8 +64,8 @@ var LoginManager = function($scope) {
         } else {
           rt=angular.fromJson(rt);
         }
-        self.loginCore(rt);
-        self.loginCoreComplete();
+        self.success(rt);
+        self.complete();
     });
 
   };
