@@ -173,10 +173,10 @@ function Controller1($scope, $http) {
 
   MAX_N_PING=3;
   $scope.pingStatus={a:0,b:0,n:0};
-  pingSuccess = function(rt) {
+  pingSuccess = function(rt,skipBroadcastServerAvailable) {
     $scope.$apply(function() {
       $scope.serverAvailable=true;
-      $scope.$broadcast('serverAvailable');
+      if(!skipBroadcastServerAvailable) $scope.$broadcast('serverAvailable');
       $scope.pingStatus.b=0;
       $scope.pingStatus.a=1;
     });
@@ -190,7 +190,7 @@ function Controller1($scope, $http) {
       console.log("Error: ",et);
     });
   };
-  $scope.pingServer=function(force) {
+  $scope.pingServer=function(force,skipBroadcastServerAvailable) {
     console.log("pingServer");
     $scope.serverAvailable=false;
     $scope.awsMan.status="disconnected";
@@ -211,7 +211,7 @@ function Controller1($scope, $http) {
       $scope.awsMan.connect(function() {
         $scope.awsMan.invokeLambda("zboota-get",[{"n":"123","a":"B"}],function(err,data) {
           console.log("lambda invoke conclusion",err,data);
-          if(err) pingError(err.message); else pingSuccess(data);
+          if(err) pingError(err.message); else pingSuccess(data,skipBroadcastServerAvailable);
         });
       },pingError);
     }
