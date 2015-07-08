@@ -28,7 +28,7 @@ var LoginManager = function($scope) {
   this.error = function(msg) {
         alert("Zboota login error: "+msg);
         $scope.$apply(function() { $scope.loginStatus='None'; });
-        //$scope.$parent.pingServer();
+        $scope.$parent.pingServer();
   };
 
   this.loginNonLambda=function() {

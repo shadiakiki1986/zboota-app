@@ -38,7 +38,7 @@ var UpdateManager = function($scope) {
   this.error = function(msg) {
 //            alert("Error updating server. "+textStatus+","+errorThrown);
           console.log(msg);
-          //$scope.$parent.pingServer();
+          $scope.$parent.pingServer();
   };
 
   this.nonLambda = function() {

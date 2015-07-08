@@ -47,15 +47,14 @@ function Controller1($scope, $http) {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).
       success( function(rt) { $scope.getCore(rt,Object.keys(dk)); } ).
-      error( function(et) { $scope.getCoreError(et,dk); });
+      error( function(et) { $scope.getCoreError(et); });
   };
 
-  $scope.getCoreError = function(et,dk) {
-    $scope.$apply(function() {
+  $scope.getCoreError = function(et) {
       console.log("Error getting zboota from server. "+et);
       $scope.getError=et;
       $scope.getStatus="None";
-    });
+      $scope.pingServer();
   };
 
   $scope.getCore = function(rt,ks) {
@@ -194,6 +193,7 @@ function Controller1($scope, $http) {
   $scope.pingServer=function(force) {
     console.log("pingServer");
     $scope.serverAvailable=false;
+    $scope.awsMan.status="disconnected";
 
     if(force) $scope.pingStatus.n=0; // reset counter
     $scope.pingStatus.n+=1;
@@ -208,15 +208,11 @@ function Controller1($scope, $http) {
 	      .success( pingSuccess )
 	      .error( pingError );
     } else {
-      // cognito role
-      // Initialize the Amazon Cognito credentials provider
-      AWS.config.region = 'us-east-1'; // Region
-      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-  	IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
-      });
-      AWS.config.httpOptions = { timeout: 5000 };
-      $scope.awsMan = new AwsManager();
-      $scope.awsMan.connect(pingSuccess,pingError);
+      $scope.awsMan.connect(function() {
+        $scope.awsMan.invokeLambda("zboota-get",[{"n":"123","a":"B"}],function(err,data) {
+          if(err) pingError(err.message); else pingSuccess(data);
+        });
+      },pingError);
     }
 
   };
@@ -224,6 +220,16 @@ function Controller1($scope, $http) {
   angular.element(document).ready(function () {
     $scope.hideAdd();
 
+    // cognito role
+    // Initialize the Amazon Cognito credentials provider
+    AWS.config.region = 'us-east-1'; // Region
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+	IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
+    });
+    AWS.config.httpOptions = { timeout: 5000 };
+    $scope.awsMan = new AwsManager();
+
+    // proceed
     $scope.pingServer();
     wlsgi1=window.localStorage.getItem('data');
     wlsgi2=window.localStorage.getItem('dataTs');
@@ -310,7 +316,7 @@ function Controller1($scope, $http) {
 
       $scope.awsMan.invokeLambda('zboota-get',dk2,function(err, data) {
         if (err||data.StatusCode!=200) {
-          $scope.getCoreError(err.message,dk);
+          $scope.getCoreError(err.message); 
         } else {
           rt=angular.fromJson(data.Payload);
           //console.log("Lambda Success in getting zboota from server");

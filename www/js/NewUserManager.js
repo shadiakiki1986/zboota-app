@@ -24,7 +24,7 @@ var NewUserManager = function($scope) {
 
   this.error = function(msg) {
         alert(msg);
-        //$scope.$parent.pingServer();
+        $scope.$parent.pingServer();
   };
 
   this.complete = function() {
