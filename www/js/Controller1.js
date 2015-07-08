@@ -75,7 +75,6 @@ function Controller1($scope, $http) {
     console.log("Error getting zboota from server. "+et);
     Object.keys(dk).forEach(function(k) { getParStatus[k]=false; });
     if(getParN==Object.keys($scope.data).length) $scope.getStatus="None";
-    $scope.pingServer();
   };
 
   $scope.getCore = function(rt,ks) {
@@ -205,20 +204,32 @@ function Controller1($scope, $http) {
       return; 
     }
     $scope.pingStatus.b=1;
-    $http.get(ZBOOTA_SERVER_URL+'/api/get.php', {timeout:5000}).
-      success( function(rt) {
-        $scope.serverAvailable=true;
-        $scope.$broadcast('serverAvailable');
-        $scope.pingStatus.b=0;
-        $scope.pingStatus.a=1;
-      }).
-      error( function(et) {
-        $scope.serverAvailable=false;
-        $scope.pingStatus.b=2;
-        $scope.pingStatus.a=1;
-        //alert("Server"+ZBOOTA_SERVER_URL+" unavailable. "+et+";");
-      })
-    ;
+    if(!USE_AWS_LAMBDA) {
+	    $http.get(ZBOOTA_SERVER_URL+'/api/get.php', {timeout:5000}).
+	      success( function(rt) {
+		$scope.serverAvailable=true;
+		$scope.$broadcast('serverAvailable');
+		$scope.pingStatus.b=0;
+		$scope.pingStatus.a=1;
+	      }).
+	      error( function(et) {
+		$scope.serverAvailable=false;
+		$scope.pingStatus.b=2;
+		$scope.pingStatus.a=1;
+		//alert("Server"+ZBOOTA_SERVER_URL+" unavailable. "+et+";");
+	      })
+	    ;
+    } else {
+	    // cognito role
+	    // Initialize the Amazon Cognito credentials provider
+	    AWS.config.region = 'us-east-1'; // Region
+	    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+		IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
+	    });
+	    $scope.awsMan = new AwsManager();
+	    $scope.awsMan.connect();
+    }
+
   };
 
   angular.element(document).ready(function () {
@@ -245,15 +256,6 @@ function Controller1($scope, $http) {
         $("#addC_n_error").hide();
       }
     });
-
-    // cognito role
-    // Initialize the Amazon Cognito credentials provider
-    AWS.config.region = 'us-east-1'; // Region
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
-    });
-    $scope.awsMan = new AwsManager();
-    $scope.awsMan.connect();
 
   });
 
