@@ -227,7 +227,10 @@ function Controller1($scope, $http) {
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 	IdentityPoolId: 'us-east-1:639fd2a8-8277-4726-b9b3-3231ed0d5f71',
     });
-    AWS.config.httpOptions = { timeout: 5000 };
+    // note that this is only the timeout for making a connection.
+    // The timeout for the tokens is by default 15 minutes, as documented here under TokenDuration
+    // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CognitoIdentity.html
+    AWS.config.httpOptions = { timeout: 5000 }; 
     $scope.awsMan = new AwsManager();
 
     // proceed
