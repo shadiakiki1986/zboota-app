@@ -7,6 +7,9 @@ http://semver.org/
 * replaced ping server of php api with a ping server using aws lambda
  * was a little tricky for login since pinging at a failed login automatically trigerred another login (recursion) ... fixed anyway
 
+2015-07-06
+* added aws lambda login
+
 2015-07-03
 * added aws lambda retrieval
 * parallel retrieval back to serial retrieval to save on aws lambda cycles
