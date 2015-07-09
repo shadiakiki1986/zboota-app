@@ -1,7 +1,12 @@
 I''m tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
-# 1.2.4
+# 2.0.0
+2015-07-09
+* completed using aws lambda functions for all app functions: login, update, new, forgot, header message
+* replaced ping server of php api with a ping server using aws lambda
+ * was a little tricky for login since pinging at a failed login automatically trigerred another login (recursion) ... fixed anyway
+
 2015-07-03
 * added aws lambda retrieval
 * parallel retrieval back to serial retrieval to save on aws lambda cycles
