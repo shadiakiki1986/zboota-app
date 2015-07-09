@@ -230,6 +230,7 @@ function Controller1($scope, $http) {
     // note that this is only the timeout for making a connection.
     // The timeout for the tokens is by default 15 minutes, as documented here under TokenDuration
     // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CognitoIdentity.html
+    // That is why I run a setTimeout in AwsManager to change the connection status to disconnected 15 minutes after the initial connection
     AWS.config.httpOptions = { timeout: 5000 }; 
     $scope.awsMan = new AwsManager();
 

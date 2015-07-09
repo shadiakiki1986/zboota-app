@@ -16,7 +16,13 @@ AwsManager.prototype.connect = function(cbFn,cbErr) {
           if(cbErr!=null) cbErr(err);
           return;
         }
+
         self.status="connected";
+
+        // change the state to disconnected after 14 minutes since the Cognito token expires in 15 minutes
+        // Check related note in Controller1 / document ready function where I set the httpOptions timeout to 5000 milliseconds
+        setTimeout(function() { self.status="disconnected"; console.log("Manually setting status to disconnected"); }, 14*60000); 
+
         console.log("AWS Cognito connected",err);
         self.accessKeyId = AWS.config.credentials.accessKeyId;
         self.secretAccessKey = AWS.config.credentials.secretAccessKey;
