@@ -43,22 +43,24 @@ AwsManager.prototype.invokeLambda = function(lfn,lp,cbFn) {
 // lp: lambda payload, javascript object, before JSON.stringify
 // cbFn: callback function, should accept err and data
 
-  if(this.status!="connected") return; // silent
+  this.connect(function() {
 
-  console.log("cognito connected, now lambda invoke");
-  // zboota-app IAM user
-  var lambda = new AWS.Lambda({
-      'accessKeyId' : this.accessKeyId,
-      'secretAccessKey'  : this.secretAccessKey,
-      'sessionToken' : this.sessionToken,
-      'region'  : "us-west-2"
+    console.log("cognito connected, now lambda invoke");
+    // zboota-app IAM user
+    var lambda = new AWS.Lambda({
+        'accessKeyId' : this.accessKeyId,
+        'secretAccessKey'  : this.secretAccessKey,
+        'sessionToken' : this.sessionToken,
+        'region'  : "us-west-2"
+    });
+  
+    // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#invoke-property
+    var params = {
+      FunctionName: lfn, /* required */
+      Payload: JSON.stringify(lp)
+    };
+    lambda.invoke(params, cbFn);
+
   });
-
-  // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#invoke-property
-  var params = {
-    FunctionName: lfn, /* required */
-    Payload: JSON.stringify(lp)
-  };
-  lambda.invoke(params, cbFn);
 
 }; // end invokeLambda

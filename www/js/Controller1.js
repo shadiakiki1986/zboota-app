@@ -231,7 +231,6 @@ function Controller1($scope, $http) {
     $scope.awsMan = new AwsManager();
 
     // proceed
-    $scope.pingServer();
     wlsgi1=window.localStorage.getItem('data');
     wlsgi2=window.localStorage.getItem('dataTs');
     if(window.localStorage.getItem('dataTs')!==null) window.localStorage.removeItem('photos');
@@ -252,6 +251,10 @@ function Controller1($scope, $http) {
         $("#addC_n_error").hide();
       }
     });
+
+    //$scope.pingServer();
+    setTimeout($scope.pingServer,5000); // delaying 5 seconds before connecting
+    //pingError(""); // dummy throw error on ping explicitly
 
   });
 
