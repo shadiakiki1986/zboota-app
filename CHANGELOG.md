@@ -1,6 +1,10 @@
 I''m tring to follow Semantic Versioning 2.0.0
 http://semver.org/
 
+# 2.0.1
+2015-07-10
+* Found that a refresh that takes longer than the timeout causes a timeout and then pings server and then re-attempts to refresh .. added condition that if timeout than don't emit the serverAvailable event which caused the same recursion as the ping from login (check 2015-07-09 notes below)
+
 # 2.0.0
 2015-07-09
 * completed using aws lambda functions for all app functions: login, update, new, forgot, header message
