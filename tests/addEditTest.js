@@ -11,6 +11,8 @@ var driver = new webdriver.Builder().
 //--------------------------------------
 driver.manage().timeouts().setScriptTimeout(5000); // http://stackoverflow.com/a/11701802
 driver.get('file://'+__dirname+'/../www/index.html');
+driver.sleep(5000); // sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
+
 driver.executeScript("localStorage.clear()"); // http://www.mkyong.com/selenium/how-to-execute-javascript-in-selenium-webdriver/
 
 driver.sleep(1000);

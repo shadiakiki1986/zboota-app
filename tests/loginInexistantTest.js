@@ -14,6 +14,7 @@ driver.manage().timeouts().setScriptTimeout(5000); // http://stackoverflow.com/a
 
 // prepare
 driver.get('file://'+__dirname+'/../www/index.html');
+driver.sleep(5000); // sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
 driver.sleep(1000);
 
 // log in inexistant

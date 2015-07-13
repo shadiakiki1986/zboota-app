@@ -13,6 +13,7 @@ var driver = new webdriver.Builder().
 
 driver.manage().timeouts().setScriptTimeout(5000); // http://stackoverflow.com/a/11701802
 driver.get('file://'+__dirname+'/../www/index.html');
+driver.sleep(5000); // sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
 driver.sleep(2000);
 
 //---------------------------------------
@@ -27,6 +28,7 @@ driver.sleep(3000);
 // clear and refresh
 driver.executeScript("localStorage.clear()"); // http://www.mkyong.com/selenium/how-to-execute-javascript-in-selenium-webdriver/
 driver.get('file://'+__dirname+'/../www/index.html');
+driver.sleep(5000); // sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
 driver.sleep(1000);
 hf.noCars(driver,By);
 
@@ -40,6 +42,7 @@ driver.sleep(3000);
 
 // refresh
 driver.get('file://'+__dirname+'/../www/index.html');
+driver.sleep(5000); // sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
 driver.sleep(3000);
 
 // check that automatically logged in
