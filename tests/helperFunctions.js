@@ -126,6 +126,11 @@ module.exports = {
 			.getInnerHtml()
 			.then(function(x) { x.should.equal("No cars added"); });
 	},
+	noHeaderError:function(driver,By) {
+		driver.findElement(By.xpath("//div[contains(@class,'container')]/div[3]/div"))
+			.getText()
+			.then(function(x) { x.trim().should.equal(""); });
+	},
 	newUser:function(driver,By,uname,onlyConfirm) {
 		if(!onlyConfirm) onlyConfirm=false;
 

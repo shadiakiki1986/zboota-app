@@ -31,6 +31,8 @@ hf.addCar(driver,By,webdriver);
 
 // since no photo
 hf.carAdded(driver,By);
+driver.sleep(2000);
+hf.noHeaderError(driver,By);
 
 //--------------------------------
 // Test edit a car
