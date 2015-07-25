@@ -1,4 +1,7 @@
 # zboota-app
+Project home page: [here](http://shadiakiki1986.github.io/zboota-server/)
+
+
 This is yet another application to help track traffic tickets you receive in [Lebanon](http://en.wikipedia.org/wiki/Lebanon).
 Other apps are [here](https://play.google.com/store/apps/details?id=air.speedTicketLebanon),
 [here](http://www.appszoom.com/android_applications/tools/lebanese-traffic-ticket_inbfc.html),
@@ -13,7 +16,8 @@ What sets this one apart is:
  * [Mechanique](http://www.dawlati.gov.lb/en/mecanique)
 * If you register your email and use it to log in, the server will email you the day after you receive a ticket
 * You can monitor several cars at once
-* It exposes a simple [API](http://genesis.akikieng.com/zboota-server/api/) that you can use to have the same table in Excel for example
+* <strike>It exposes a simple [API](http://genesis.akikieng.com/zboota-server/api/) that you can use to have the same table in Excel for example</strike>
+ * Cancelled unless somebody explicitly requests so
 * It's opensourced [here](https://github.com/shadiakiki1986/zboota-app)
 * It's on
  * [Google Play](https://play.google.com/store/apps/details?id=com.akikieng.genesis.zbootaapp)
@@ -27,7 +31,10 @@ What sets this one apart is:
 * Semantic versioning: http://semver.org/
 
 # Under the hood
-* API back-end: [zboota-server](https://github.com/shadiakiki1986/zboota-server)
-* Built with cordova, html, javascript, css, angular.js, moment.js, jquery.js
+* PHP back-end: [zboota-server](https://github.com/shadiakiki1986/zboota-server)
+* Nodejs API: [zboota-server-nodejs](https://github.com/shadiakiki1986/zboota-server-nodejs)
+* Built with cordova, html, javascript, css, angular.js, moment.js, jquery.js, etc
 
-
+# Dev notes
+* This app is published via github pages
+* Doing so is done by copying the contents of `www` to the `client` folder in the gh-pages branch of [zboota-server](https://github.com/shadiakiki1986/zboota-server)
