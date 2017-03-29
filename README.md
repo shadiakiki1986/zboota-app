@@ -38,3 +38,8 @@ What sets this one apart is:
 # Dev notes
 * This app is published via github pages
 * Doing so is done by copying the contents of `www` to the `client` folder in the gh-pages branch of [zboota-server](https://github.com/shadiakiki1986/zboota-server)
+
+# Usage
+To install to a web server, just serve the folder `www`, e.g. `python -m SimpleHTTPServer 8001`
+
+To upload the application to Google Play Store or Apple Store, run `make install` or any of the other Makefile targets
