@@ -4,14 +4,16 @@ Automated testing using selenium is marked with a check.
 
 Please make sure to have followed the installation by ''make install''
 
-Launch webdriver: `webdriver-manager start`
 
 Run the tests with `SELENIUM_BROWSER=chrome make test`
 - note that only the following tests pass on phantomjs:
   - `tests/addEditTest.js`
+  - `phantomjs` requires Launch webdriver: `webdriver-manager start`
+    - am i sure? 
 - the rest only pass on chrome
-- also, firefox 55 onwards does not work with selenium
-- NOTE that headless testing on AWS EC2 doesn't work (not sure if because of closed ports or firefox headless or phantomjs)
+- firefox 55 onwards does not work with selenium
+- NOTE that headless testing on AWS EC2 doesn't work
+  - (not sure if because of closed ports or firefox headless or phantomjs)
 
 
 # Preparation

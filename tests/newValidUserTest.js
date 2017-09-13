@@ -21,7 +21,7 @@ driver.sleep(15000);
 // https://blog.tompawlak.org/generate-random-values-nodejs-javascript
 var uuid = require('node-uuid');
 var newEmail = "test-"+uuid.v4()+"@hotmail.com";
-console.log('test new email', newEmail);
+// console.log('test new email', newEmail);
 hf.newUser(driver,By,newEmail);
 driver.sleep(5000);
 
