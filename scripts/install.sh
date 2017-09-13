@@ -18,7 +18,7 @@
 set -e
 
 # install prerequisites, except node.js
-sudo apt-get install curl npm openjdk-7-jdk ant gcc-multilib lib32z1 lib32stdc++6
+sudo apt-get install curl npm openjdk-9-jdk ant gcc-multilib lib32z1 lib32stdc++6
 
 # install node.js
 if [ -z `which node` ]
