@@ -1,6 +1,9 @@
 The testing of the app is covered by the steps below.
 
-Automated testing using selenium is marked with a check.
+- Automated testing using selenium is marked with a check.
+- Unmarked tests are still manual
+
+# Pre-requisites
 
 Please make sure to have followed the installation by ''make install''
 
@@ -24,6 +27,8 @@ To test with phantomjs
 wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O - | tar -xjf - -C .
 sudo ln -s $PWD/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/
 ```
+
+# Running the tests
 
 Run the tests with `SELENIUM_BROWSER=chrome make test`
 - note that only the following tests pass on phantomjs:
