@@ -25,7 +25,7 @@
 </head>
 <body>
 <div ng-controller="Controller1" class="container">
-  <div ng-show="!serverAvailable&&pingStatus.a!=0" class="alert alert-danger text-center alert-dismissible">
+  <div ng-show="!serverAvailable&&pingStatus.a!=0" class="alert alert-danger text-center alert-dismissible" id='server-unavailable'>
     <span class="glyphicon glyphicon-alert"></span> &nbsp; Server unavailable.
       <button ng-click="pingServer(true)" class="btn btn-small btn-warning" ng-disabled="pingStatus.b==1">Try again</button>
   </div>

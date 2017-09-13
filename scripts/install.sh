@@ -18,39 +18,39 @@
 set -e
 
 # install prerequisites, except node.js
-sudo apt-get install curl npm openjdk-9-jdk ant gcc-multilib lib32z1 lib32stdc++6
+sudo apt-get install curl openjdk-9-jdk
 
 # install node.js
 if [ -z `which node` ]
 then
-	curl -sL https://deb.nodesource.com/setup | bash - 
-	apt-get install -y nodejs
+	curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - 
+	sudo apt-get install -y nodejs
+  nodejs --version # v6.11.3
+  npm --version # 5.3.0
+  sudo npm i -g npm
+  npm --version # 5.4.1
 else
 	echo "Nodejs is already installed at `which node`. Not installing"
-fi
-
-# install cordova
-npm install -g cordova libxmljs fs
-
-# install android sdk
-# Reference: http://sblackwell.com/blog/2014/06/installing-the-android-sdk-on-a-headless-server/
-if [ -z ANDROID_HOME ]
-then
-	wget http://dl.google.com/android/android-sdk_r24.0.2-linux.tgz -o $HOME/android-sdk_r24.0.2-linux.tgz
-	cd $HOME
-	tar -xzf android-sdk_r24.0.2-linux.tgz
-	echo "export ANDROID_HOME=/home/ubuntu/android-sdk-linux" >> ~/.bash_profile
-	echo "export PATH=\$PATH:\$ANDROID_HOME/tools" >> ~/.bash_profile
-	echo "export PATH=\$PATH:\$ANDROID_HOME/platform-tools" >> ~/.bash_profile
-	source ~/.bash_profile
-	android list sdk # install api in android sdk
-	android update sdk --no-ui --filter 1,2,4
-	cd -
-else
-	echo "Android SDK already installed at $ANDROID_HOME, not installing"
 fi
 
 # for testing
 npm install selenium-webdriver should # required node packages
 
+# https://www.npmjs.com/package/webdriver-manager
+sudo npm install -g webdriver-manager
+sudo webdriver-manager update
 
+# for firefox
+sudo ln -s /usr/local/lib/node_modules/webdriver-manager/selenium/geckodriver-v0.18.0 /usr/bin/geckodriver
+
+# to use chrome
+# do I need this? sudo apt-get install chromium-chromedriver
+wget http://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip -O - | unzip 
+sudo ln -s $PWD/chromedriver /usr/bin/
+
+# download/install phantomjs
+#   http://phantomjs.org/download.html
+# since firefox 55 onwards is not compatible with selenium
+#   https://seleniumhq.wordpress.com/2017/08/09/firefox-55-and-selenium-ide/
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O - | tar -xjf - -C .
+sudo ln -s $PWD/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/

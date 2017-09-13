@@ -13,18 +13,20 @@ var driver = new webdriver.Builder().
 
 driver.manage().timeouts().setScriptTimeout(5000); // http://stackoverflow.com/a/11701802
 driver.get('file://'+__dirname+'/../www/index.html');
-driver.sleep(5000); // sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
-driver.sleep(2000);
+// sleep 5 secs while connection is established .. this was made for android which was crashing if app didn't wait for a bit before connecting
+driver.sleep(15000);
 
 // new invalid
 hf.newUser(driver,By,"blabla");
-driver.sleep(1000);
+driver.sleep(3000);
 
-driver.switchTo().alert().getText().then(function(x) { x.should.equal("Zboota new account error: Invalid email blabla"); });
+driver.switchTo().alert().getText().then(function(x) {
+  x.should.equal("Zboota new account error: Invalid email blabla");
+});
 driver.switchTo().alert().dismiss();
 //driver.findElement(By.id("loginCloseBtn")).click();
 hf.elementHidden(driver,By,"loginModal");
 
 // done
 driver.sleep(1000);
-
+driver.quit();

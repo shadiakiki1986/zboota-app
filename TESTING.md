@@ -2,7 +2,16 @@ The testing of the app is covered by the steps below.
 
 Automated testing using selenium is marked with a check.
 
-Please make sure to have followed the installation by ''make install''. Run these by ''make test'' 
+Please make sure to have followed the installation by ''make install''
+
+Launch webdriver: `webdriver-manager start`
+
+Run the tests with `SELENIUM_BROWSER=chrome make test`
+- note that only the following tests pass on phantomjs:
+  - `tests/addEditTest.js`
+- the rest only pass on chrome
+- also, firefox 55 onwards does not work with selenium
+- NOTE that headless testing on AWS EC2 doesn't work (not sure if because of closed ports or firefox headless or phantomjs)
 
 
 # Preparation

@@ -1,0 +1,29 @@
+{
+  "name": "zboota-app",
+  "version": "1.0.0",
+  "description": "frontend for zboota-server",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shadiakiki1986/zboota-app.git"
+  },
+  "author": "shadi akiki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shadiakiki1986/zboota-app/issues"
+  },
+  "homepage": "https://github.com/shadiakiki1986/zboota-app#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "selenium-webdriver": "^3.5.0",
+    "should": "^13.0.1",
+    "node-uuid": "^1.4.8"
+  }
+}

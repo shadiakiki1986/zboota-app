@@ -1,4 +1,5 @@
 // Helper function
+var self = this;
 module.exports = {
 	btnEnabled:function(driver,By,id) {
 		return driver
@@ -64,30 +65,23 @@ module.exports = {
 	login:function(driver,By,onlyConfirm) {
 		if(!onlyConfirm) onlyConfirm=false;
 
-		testPass="";
-		hf2=this;
-		driver.executeAsyncScript(function() {
-		  var callback = arguments[arguments.length - 1];
-		  var xhr = new XMLHttpRequest();
-		  xhr.open("GET", "http://genesis.akikieng.com/zboota-server/api/testUserPassword.php"+"?timestamp=" + new Date().getTime());
-		  xhr.onreadystatechange = function() {
-		    if (xhr.readyState == 4 && xhr.status==200) {
-		      callback(xhr.responseText);
-		    }
-		  }
-		  xhr.send();
-		}).then(function(str) {
-		    (str.length==5).should.be.true;
-		    testPass=str;
-//console.log(str);
-		    hf2.login2(driver,By,{"user":"shadi_akiki_1986@hotmail.com","pass":testPass},onlyConfirm);
-		    driver.sleep(3000);
-		    hf2.elementHidden(driver,By,"loginModal");
-		});
-
+    testUser = "shadiakiki1986@yahoo.com";
+		testPass="xmkke";
+    this.login2(
+      driver,
+      By,
+      { "user":testUser,
+        "pass":testPass },
+      onlyConfirm
+    );
+    driver.sleep(3000);
+    this.elementHidden(driver,By,"loginModal");
 	},
 	login2: function(driver,By,args,onlyConfirm) {
 		if(!onlyConfirm) onlyConfirm=false;
+
+		this.elementHidden(driver,By,'server-unavailable');
+    //driver.getPageSource().then(_ => console.log(_));
 
 		driver.findElement(By.id("existingUserBtn")).click(); 
 		this.elementDisplayed(driver,By,"loginModal");
@@ -122,9 +116,9 @@ module.exports = {
 		this.elementHidden(driver,By,'newUserBtn');
 	},
 	noCars:function(driver,By) {
-		driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[1]/td[1]"))
-			.getInnerHtml()
-			.then(function(x) { x.should.equal("No cars added"); });
+		return driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[1]/td[1]"))
+      .getAttribute('innerHTML')
+      .then(v =>  v.should.equal("No cars added"));
 	},
 	noHeaderError:function(driver,By) {
 		driver.findElement(By.xpath("//div[contains(@class,'container')]/div[3]/div"))
@@ -186,6 +180,10 @@ module.exports = {
 		// since no photo
 		driver.findElement(By.xpath("//table[@id='mytable']/tbody[2]/tr[2]/td[1]/small"))
 			.getText()
-			.then(function(x) { x.should.equal("Mechanique: There are no results matching the specifications you\'ve entered..."); });
+			.then(function(x) {
+        v1 = "Mechanique: There are no results matching the specifications you\'ve entered...";
+        v2 = "Mechanique: Not available";
+        (x==v1 || x==v2).should.be.true();
+      });
 	}
 };

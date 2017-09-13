@@ -6,11 +6,18 @@ test:
 	node tests/addLoggedInTest.js
 	node tests/addMechaniqueTest.js
 
+androidAll: androidInstall androidPrepare androidBuild
+
+androidInstall:
+	bash scripts/install_android.sh
+
 androidPrepare:
 	cordova platform add android
 
 androidBuild:
 	bash scripts/buildAndroid.sh
+
+iosAll: iosPrepare iosBuild
 
 iosPrepare:
 	npm install libxmljs

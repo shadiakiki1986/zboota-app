@@ -43,3 +43,9 @@ What sets this one apart is:
 To install to a web server, just serve the folder `www`, e.g. `python -m SimpleHTTPServer 8001`
 
 To upload the application to Google Play Store or Apple Store, run `make install` or any of the other Makefile targets
+
+Check [Testing](TESTING.md)
+
+To build the android app: `make androidAll` (or read the Makefile and run each step alone)
+
+To build the ios app: `make iosAll` (or read the Makefile)
