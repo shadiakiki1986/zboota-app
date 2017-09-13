@@ -4,6 +4,26 @@ Automated testing using selenium is marked with a check.
 
 Please make sure to have followed the installation by ''make install''
 
+To test with firefox (check note below that this doesnt work with firefox 55 ATM)
+```
+# https://www.npmjs.com/package/webdriver-manager
+sudo npm install -g webdriver-manager
+sudo webdriver-manager update
+
+# for firefox
+sudo ln -s /usr/local/lib/node_modules/webdriver-manager/selenium/geckodriver-v0.18.0 /usr/bin/geckodriver
+```
+
+To test with phantomjs
+```
+
+# download/install phantomjs
+#   http://phantomjs.org/download.html
+# since firefox 55 onwards is not compatible with selenium
+#   https://seleniumhq.wordpress.com/2017/08/09/firefox-55-and-selenium-ide/
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O - | tar -xjf - -C .
+sudo ln -s $PWD/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/
+```
 
 Run the tests with `SELENIUM_BROWSER=chrome make test`
 - note that only the following tests pass on phantomjs:

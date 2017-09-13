@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# Notes:
+# Manually update which SDK API versions to download for android update sdk command
 set -e
 
 # install prerequisites, except node.js
